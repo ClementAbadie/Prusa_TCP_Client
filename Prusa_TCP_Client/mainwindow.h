@@ -7,10 +7,13 @@
 #include <QString>
 #include <QTimer>
 
-
 #include "ui_mainwindow.h"
 #include "ui_authorinfos.h"
 #include "ui_server_options.h"
+
+
+
+#define _VERSION_ "1.0"
 
 
 

@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tcp_timer, SIGNAL(timeout()), this, SLOT(tcp_timeout()));
 
 
+
+
     mainWindows->comboBox_Server_IP->addItem("192.168.0.5");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.150");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.190");
@@ -41,7 +43,7 @@ void MainWindow::on_actionAbout_triggered()
 
     dui.setupUi(&dialog);
     // some more stuff to setup dialog
-
+    dui.label_version->setText(_VERSION_);
     dialog.show();
 
     if (dialog.exec() == QDialog::Accepted)
