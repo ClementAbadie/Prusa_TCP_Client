@@ -14,8 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tcp_timer, SIGNAL(timeout()), this, SLOT(tcp_timeout()));
 
 
-
-
+    mainWindows->comboBox_Server_IP->addItem("prusabadie.ddns.net");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.5");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.150");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.190");
@@ -111,7 +110,7 @@ void MainWindow::Connect_to_Server()
 
         }
     }
-            else
+    else
     {
         m_TcpSocket.write("exit");
         m_TcpSocket.close();
@@ -200,3 +199,29 @@ void MainWindow::on_Server_ReStart_clicked()
 
 
 
+
+void MainWindow::on_Server_Web_Open_clicked()
+{
+    QString server_ip = mainWindows->comboBox_Server_IP->currentText();
+    QString web_server_url = "http://" + server_ip + ":" + WEB_SERVER_PORT;
+
+    if (m_debug)
+        qDebug() << "web_server_url" << web_server_url;
+
+    QDesktopServices::openUrl(QUrl(web_server_url, QUrl::TolerantMode));
+}
+
+void MainWindow::on_Server_Rep_Host_clicked()
+{
+//TODO : Clean code :
+
+    QDir repetier_dir_full("C:/Program Files/Repetier-Host");
+    QString file = repetier_dir_full.absolutePath() + "/RepetierHost.exe";
+
+    QProcess *process = new QProcess(this);
+
+    if (m_debug)
+        qDebug() << "repetier path" << file;
+
+    process->startDetached(file, QStringList() << "");
+}

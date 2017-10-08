@@ -6,16 +6,19 @@
 #include <QTcpSocket>
 #include <QString>
 #include <QTimer>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QProcess>
+#include <QDir>
 
 #include "ui_mainwindow.h"
 #include "ui_authorinfos.h"
 #include "ui_server_options.h"
 
 
-
 #define _VERSION_ "1.0"
 
-
+#define WEB_SERVER_PORT "3344"
 
 namespace Ui {
 class MainWindow;
@@ -40,26 +43,21 @@ private slots:
     void onDisconnected();
     void onTextMessageReceived(QString message);
     void readyRead();
-
-
-    void on_Prusa_ON_clicked();
-
-    void on_Server_Stop_clicked();
-
-    void on_Prusa_OFF_clicked();
-
-    void on_Server_ReStart_clicked();
-
     void tcp_timeout();
 
+    void on_Prusa_ON_clicked();
+    void on_Prusa_OFF_clicked();
+    void on_Server_Stop_clicked();
+    void on_Server_ReStart_clicked();
 
     void on_actionOptions_triggered();
 
+    void on_Server_Web_Open_clicked();
 
+    void on_Server_Rep_Host_clicked();
 
 private:
     Ui::MainWindow *mainWindows;
-
 
     Ui_Dialog_Server_Options *dui_Options;
     QDialog dialog_Options;
@@ -72,7 +70,6 @@ private:
     bool m_debug = true;
 
     QTimer *tcp_timer = new QTimer(this);
-
     int tcp_timeout_time_ms = 1000;
 
     void Connect_to_Server();

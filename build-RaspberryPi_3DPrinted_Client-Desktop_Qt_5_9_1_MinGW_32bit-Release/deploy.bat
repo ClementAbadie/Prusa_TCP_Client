@@ -1,0 +1,1 @@
+copy .\release\RaspberryPi_3DPrinted_Client.exe .\release-package\RaspberryPi_3DPrinted_Client\RaspberryPi_3DPrinted_Client.exe

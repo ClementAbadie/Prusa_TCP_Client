@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>200</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>400</width>
-    <height>200</height>
+    <height>300</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>400</width>
-    <height>200</height>
+    <height>300</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -29,9 +29,9 @@
    <widget class="QComboBox" name="comboBox_Server_IP">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>40</x>
       <y>10</y>
-      <width>111</width>
+      <width>131</width>
       <height>22</height>
      </rect>
     </property>
@@ -39,7 +39,7 @@
      <bool>true</bool>
     </property>
     <property name="currentText">
-     <string>192.168.0.5</string>
+     <string>prusabadie.ddns.net</string>
     </property>
    </widget>
    <widget class="QPushButton" name="PushButton_Connect_to_Server">
@@ -140,9 +140,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>240</x>
       <y>90</y>
-      <width>75</width>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
@@ -156,9 +156,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>240</x>
       <y>50</y>
-      <width>75</width>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
@@ -174,7 +174,7 @@
      <rect>
       <x>150</x>
       <y>50</y>
-      <width>75</width>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
@@ -186,7 +186,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>150</y>
+      <y>240</y>
       <width>361</width>
       <height>21</height>
      </rect>
@@ -203,12 +203,44 @@
      <rect>
       <x>150</x>
       <y>90</y>
-      <width>75</width>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>RESTART</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Server_Web_Open">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>130</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Open Web Server</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Server_Rep_Host">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>170</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Open Repetier Host</string>
     </property>
    </widget>
   </widget>
