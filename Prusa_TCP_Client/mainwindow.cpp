@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tcp_timer, SIGNAL(timeout()), this, SLOT(tcp_timeout()));
 
 
-    mainWindows->comboBox_Server_IP->addItem("prusabadie.ddns.net");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.5");
+    mainWindows->comboBox_Server_IP->addItem("prusabadie.ddns.net");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.150");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.190");
 
