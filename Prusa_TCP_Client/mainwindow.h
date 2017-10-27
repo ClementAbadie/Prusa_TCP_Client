@@ -16,9 +16,13 @@
 #include "ui_server_options.h"
 
 
-#define _VERSION_ "1.0"
+#define _VERSION_ "1.1"
 
 #define WEB_SERVER_PORT "3344"
+
+#define WEB_WEBCAM_PORT "9090"
+
+#define STATUS_BAR_MSG_TIMEOUT 3000
 
 namespace Ui {
 class MainWindow;
@@ -50,11 +54,20 @@ private slots:
     void on_Server_Stop_clicked();
     void on_Server_ReStart_clicked();
 
+    void request_to_server_temperature();
+
     void on_actionOptions_triggered();
 
-    void on_Server_Web_Open_clicked();
+    void web_Open_WebCam_View();
+    void web_Open_Server_View();
 
+    void on_Server_Web_Open_clicked();
     void on_Server_Rep_Host_clicked();
+    void on_Web_WebCam_View_clicked();
+
+    void on_Web_WebCam_Restart_clicked();
+
+    void on_Web_WebCam_Stop_clicked();
 
 private:
     Ui::MainWindow *mainWindows;
@@ -71,6 +84,9 @@ private:
 
     QTimer *tcp_timer = new QTimer(this);
     int tcp_timeout_time_ms = 1000;
+
+    int webcam_res_h = 800;
+    int webcam_res_v = 600;
 
     void Connect_to_Server();
 };

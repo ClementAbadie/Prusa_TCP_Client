@@ -20,6 +20,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -46,6 +47,7 @@ public:
     QMenuBar *menuBar;
     QMenu *Options;
     QMenu *menuAide;
+    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -100,7 +102,7 @@ public:
         Prusa_ON->setGeometry(QRect(150, 50, 81, 31));
         Server_MSG = new QLabel(centralWidget);
         Server_MSG->setObjectName(QStringLiteral("Server_MSG"));
-        Server_MSG->setGeometry(QRect(20, 240, 361, 21));
+        Server_MSG->setGeometry(QRect(10, 230, 381, 21));
         Server_ReStart = new QPushButton(centralWidget);
         Server_ReStart->setObjectName(QStringLiteral("Server_ReStart"));
         Server_ReStart->setEnabled(false);
@@ -122,6 +124,10 @@ public:
         menuAide = new QMenu(menuBar);
         menuAide->setObjectName(QStringLiteral("menuAide"));
         MainWindow->setMenuBar(menuBar);
+        statusBar = new QStatusBar(MainWindow);
+        statusBar->setObjectName(QStringLiteral("statusBar"));
+        statusBar->setSizeGripEnabled(false);
+        MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(Options->menuAction());
         menuBar->addAction(menuAide->menuAction());

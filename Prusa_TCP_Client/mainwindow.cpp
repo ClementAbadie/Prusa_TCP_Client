@@ -62,6 +62,8 @@ void MainWindow::on_actionOptions_triggered()
     // some more stuff to setup dialog
 
     dui.spinBox_timeout_unsaved_time->setValue(tcp_timeout_time_ms);
+    dui.spinBox_Video_res_h->setValue(webcam_res_h);
+    dui.spinBox_Video_res_v->setValue(webcam_res_v);
 
     dialog.show();
 
@@ -72,13 +74,17 @@ void MainWindow::on_actionOptions_triggered()
     }
 
     tcp_timeout_time_ms = dui.spinBox_timeout_unsaved_time->value();
+    webcam_res_h = dui.spinBox_Video_res_h->value();
+    webcam_res_v = dui.spinBox_Video_res_v->value();
+
     qDebug() << "END";
 }
 
 void MainWindow::tcp_timeout(){
     qDebug() << "Timeout ! Aborted.";
 
-    mainWindows->Server_MSG->setText("Server not found !");
+    //mainWindows->Server_MSG->setText("Server not found !");
+    mainWindows->statusBar->showMessage("Server not found !",STATUS_BAR_MSG_TIMEOUT);
     m_TcpSocket.disconnectFromHost();
     m_TcpSocket.close();
     m_TcpSocket.abort();
@@ -93,7 +99,8 @@ void MainWindow::on_PushButton_Connect_to_Server_clicked()
 
 void MainWindow::Connect_to_Server()
 {
-    mainWindows->Server_MSG->setText("");
+    //mainWindows->Server_MSG->setText("");
+    mainWindows->statusBar->showMessage("");
     if(!m_TcpSocket_connected)
     {
         QString server_ip = mainWindows->comboBox_Server_IP->currentText();
@@ -103,7 +110,8 @@ void MainWindow::Connect_to_Server()
             if (m_debug)
                 qDebug() << "TcpSocket server:" << server_ip << ":" << server_port;
 
-            mainWindows->Server_MSG->setText("Connection...");
+            //mainWindows->Server_MSG->setText("Connection...");
+            mainWindows->statusBar->showMessage("Connection...");
             m_TcpSocket.connectToHost(server_ip,server_port);
 
             tcp_timer->start(tcp_timeout_time_ms);
@@ -123,6 +131,7 @@ void MainWindow::onConnected()
 {
     tcp_timer->stop();
     mainWindows->PushButton_Connect_to_Server->setText("Disconnect");
+//    mainWindows->statusBar->showMessage("Disconnect");
     m_TcpSocket_connected = true;
 
     if (m_debug)
@@ -134,6 +143,8 @@ void MainWindow::onConnected()
     mainWindows->Prusa_OFF->setEnabled(true);
     mainWindows->Server_Stop->setEnabled(true);
     mainWindows->Server_ReStart->setEnabled(true);
+    mainWindows->Web_WebCam_Restart->setEnabled(true);
+    mainWindows->Web_WebCam_Stop->setEnabled(true);
 }
 //! [onConnected]
 
@@ -142,6 +153,7 @@ void MainWindow::onConnected()
 void MainWindow::onDisconnected()
 {
     mainWindows->PushButton_Connect_to_Server->setText("Connection");
+    //mainWindows->statusBar->showMessage("Connection");
     m_TcpSocket_connected = false;
 
     if (m_debug)
@@ -153,7 +165,10 @@ void MainWindow::onDisconnected()
     mainWindows->Prusa_OFF->setEnabled(false);
     mainWindows->Server_Stop->setEnabled(false);
     mainWindows->Server_ReStart->setEnabled(false);
-    mainWindows->Server_MSG->setText("");
+    mainWindows->Web_WebCam_Restart->setEnabled(false);
+    mainWindows->Web_WebCam_Stop->setEnabled(false);
+    //mainWindows->Server_MSG->setText("");
+    mainWindows->statusBar->showMessage("");
 }
 //! [onDisconnected]
 
@@ -171,7 +186,9 @@ void MainWindow::onTextMessageReceived(QString message)
 void MainWindow::readyRead()
 {
 
-    mainWindows->Server_MSG->setText(m_TcpSocket.readAll());
+    //mainWindows->Server_MSG->setText(m_TcpSocket.readAll());
+
+    mainWindows->statusBar->showMessage(tr(m_TcpSocket.readAll()));
 
 }
 
@@ -196,11 +213,27 @@ void MainWindow::on_Server_ReStart_clicked()
     m_TcpSocket.write("M10");
 }
 
+void MainWindow::request_to_server_temperature()
+{
+    m_TcpSocket.write("M100");
+}
 
 
 
+void MainWindow::on_Web_WebCam_Stop_clicked()
+{
+    m_TcpSocket.write("M200");
+}
 
-void MainWindow::on_Server_Web_Open_clicked()
+void MainWindow::on_Web_WebCam_Restart_clicked()
+{
+    QString command = "M201:" + QString::number(webcam_res_h) + ":" + QString::number(webcam_res_v);
+    m_TcpSocket.write(command.toStdString().c_str());
+
+        qDebug() << "command.toStdString().c_str() : " << command.toStdString().c_str();
+}
+
+void MainWindow::web_Open_Server_View()
 {
     QString server_ip = mainWindows->comboBox_Server_IP->currentText();
     QString web_server_url = "http://" + server_ip + ":" + WEB_SERVER_PORT;
@@ -210,6 +243,28 @@ void MainWindow::on_Server_Web_Open_clicked()
 
     QDesktopServices::openUrl(QUrl(web_server_url, QUrl::TolerantMode));
 }
+
+void MainWindow::web_Open_WebCam_View()
+{
+    QString server_ip = mainWindows->comboBox_Server_IP->currentText();
+    QString web_server_url = "http://" + server_ip + ":" + WEB_WEBCAM_PORT + "/stream";
+
+    if (m_debug)
+        qDebug() << "web_server_url" << web_server_url;
+
+    QDesktopServices::openUrl(QUrl(web_server_url, QUrl::TolerantMode));
+}
+
+void MainWindow::on_Server_Web_Open_clicked()
+{
+     web_Open_Server_View();
+}
+
+void MainWindow::on_Web_WebCam_View_clicked()
+{
+    web_Open_WebCam_View();
+}
+
 
 void MainWindow::on_Server_Rep_Host_clicked()
 {
@@ -225,3 +280,9 @@ void MainWindow::on_Server_Rep_Host_clicked()
 
     process->startDetached(file, QStringList() << "");
 }
+
+
+
+
+
+

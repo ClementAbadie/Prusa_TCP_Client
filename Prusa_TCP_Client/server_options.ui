@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>273</width>
-    <height>106</height>
+    <width>274</width>
+    <height>135</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>70</y>
+     <y>90</y>
      <width>241</width>
      <height>32</height>
     </rect>
@@ -39,7 +39,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>30</y>
+     <y>20</y>
      <width>131</width>
      <height>21</height>
     </rect>
@@ -55,7 +55,7 @@
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>30</y>
+     <y>20</y>
      <width>71</width>
      <height>22</height>
     </rect>
@@ -71,6 +71,79 @@
    </property>
    <property name="value">
     <number>1000</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spinBox_Video_res_h">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>60</y>
+     <width>71</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>480</number>
+   </property>
+   <property name="maximum">
+    <number>1920</number>
+   </property>
+   <property name="value">
+    <number>800</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="server_label_3">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>60</y>
+     <width>31</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>x</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::NoTextInteraction</set>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spinBox_Video_res_v">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>60</y>
+     <width>71</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>320</number>
+   </property>
+   <property name="maximum">
+    <number>1080</number>
+   </property>
+   <property name="value">
+    <number>600</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_timeout_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>71</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>WebCam :</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
  </widget>
