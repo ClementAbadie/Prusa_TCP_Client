@@ -66,6 +66,7 @@ void MainWindow::on_actionOptions_triggered()
     dui.spinBox_timeout_unsaved_time->setValue(tcp_timeout_time_ms);
     dui.spinBox_Video_res_h->setValue(webcam_res_h);
     dui.spinBox_Video_res_v->setValue(webcam_res_v);
+    dui.spinBox_Video_framerate->setValue(webcam_framerate);
 
     dialog.show();
 
@@ -78,6 +79,7 @@ void MainWindow::on_actionOptions_triggered()
     tcp_timeout_time_ms = dui.spinBox_timeout_unsaved_time->value();
     webcam_res_h = dui.spinBox_Video_res_h->value();
     webcam_res_v = dui.spinBox_Video_res_v->value();
+    webcam_framerate = dui.spinBox_Video_framerate->value();
 
     qDebug() << "END";
 }
@@ -260,7 +262,7 @@ void MainWindow::on_Web_WebCam_Stop_clicked()
 
 void MainWindow::on_Web_WebCam_Restart_clicked()
 {
-    QString command = "M201:" + QString::number(webcam_res_h) + ":" + QString::number(webcam_res_v);
+    QString command = "M201:" + QString::number(webcam_res_h) + ":" + QString::number(webcam_res_v) + ":" + QString::number(webcam_framerate);
     m_TcpSocket.write(command.toStdString().c_str());
 
     qDebug() << "command.toStdString().c_str() : " << command.toStdString().c_str();

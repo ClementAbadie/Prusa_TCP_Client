@@ -16,7 +16,7 @@
 #include "ui_server_options.h"
 
 
-#define _VERSION_ "1.3"
+#define _VERSION_ "1.4"
 
 #define WEB_SERVER_PORT "3344"
 
@@ -91,6 +91,7 @@ private:
 
     int webcam_res_h = 1600;
     int webcam_res_v = 900;
+    int webcam_framerate = 20;
 
     void Connect_to_Server();
 };
