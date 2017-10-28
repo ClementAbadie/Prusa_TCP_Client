@@ -16,7 +16,7 @@
 #include "ui_server_options.h"
 
 
-#define _VERSION_ "1.1"
+#define _VERSION_ "1.3"
 
 #define WEB_SERVER_PORT "3344"
 
@@ -48,6 +48,7 @@ private slots:
     void onTextMessageReceived(QString message);
     void readyRead();
     void tcp_timeout();
+    void tmp_timeout();
 
     void on_Prusa_ON_clicked();
     void on_Prusa_OFF_clicked();
@@ -85,8 +86,11 @@ private:
     QTimer *tcp_timer = new QTimer(this);
     int tcp_timeout_time_ms = 1000;
 
-    int webcam_res_h = 800;
-    int webcam_res_v = 600;
+    QTimer *tmp_timer = new QTimer(this);
+    int tmp_timeout_time_ms = 10000;
+
+    int webcam_res_h = 1600;
+    int webcam_res_v = 900;
 
     void Connect_to_Server();
 };

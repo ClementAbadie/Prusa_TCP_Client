@@ -89,7 +89,7 @@
     <number>1920</number>
    </property>
    <property name="value">
-    <number>800</number>
+    <number>1280</number>
    </property>
   </widget>
   <widget class="QLabel" name="server_label_3">
@@ -127,7 +127,7 @@
     <number>1080</number>
    </property>
    <property name="value">
-    <number>600</number>
+    <number>720</number>
    </property>
   </widget>
   <widget class="QLabel" name="label_timeout_2">

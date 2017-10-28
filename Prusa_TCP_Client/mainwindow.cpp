@@ -18,10 +18,12 @@ MainWindow::MainWindow(QWidget *parent) :
     mainWindows->comboBox_Server_IP->addItem("prusabadie.ddns.net");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.150");
     mainWindows->comboBox_Server_IP->addItem("192.168.0.190");
+    mainWindows->comboBox_Server_IP->addItem("192.168.0.25");
 
 
     mainWindows->comboBox_Server_Port->addItem("51717");
     mainWindows->comboBox_Server_Port->addItem("56250");
+    mainWindows->comboBox_Server_Port->addItem("35136");
 
     Connect_to_Server();
 
@@ -92,6 +94,14 @@ void MainWindow::tcp_timeout(){
 
 }
 
+void MainWindow::tmp_timeout(){
+    qDebug() << "Request temperature !";
+
+    request_to_server_temperature();
+    tmp_timer->start(tmp_timeout_time_ms);
+
+}
+
 void MainWindow::on_PushButton_Connect_to_Server_clicked()
 {
     Connect_to_Server();
@@ -131,11 +141,16 @@ void MainWindow::onConnected()
 {
     tcp_timer->stop();
     mainWindows->PushButton_Connect_to_Server->setText("Disconnect");
-//    mainWindows->statusBar->showMessage("Disconnect");
+    //    mainWindows->statusBar->showMessage("Disconnect");
     m_TcpSocket_connected = true;
 
     if (m_debug)
         qDebug() << "TcpSocket connected";
+
+    //TEMPERATURE TIMER
+
+    connect(tmp_timer, SIGNAL(timeout()), this, SLOT(tmp_timeout()));
+    tmp_timer->start();
 
     //ENABLE BUTTONS
 
@@ -158,6 +173,10 @@ void MainWindow::onDisconnected()
 
     if (m_debug)
         qDebug() << "TcpSocket Disconnected";
+
+    //TEMPERATURE TIMER
+
+    tmp_timer->stop();
 
     //DISABLE BUTTONS
 
@@ -188,7 +207,21 @@ void MainWindow::readyRead()
 
     //mainWindows->Server_MSG->setText(m_TcpSocket.readAll());
 
-    mainWindows->statusBar->showMessage(tr(m_TcpSocket.readAll()));
+    QString server_msg = tr(m_TcpSocket.readAll());
+
+
+    if(server_msg.startsWith("M100:"))
+    {
+            server_msg.remove(0,5);
+            //server_msg.remove(QRegExp("[\\n\\t\\r]"));
+            mainWindows->Server_tmp->setText(server_msg + " °C");
+    }
+    else
+    {
+        mainWindows->statusBar->showMessage(server_msg);
+    }
+
+
 
 }
 
@@ -230,7 +263,7 @@ void MainWindow::on_Web_WebCam_Restart_clicked()
     QString command = "M201:" + QString::number(webcam_res_h) + ":" + QString::number(webcam_res_v);
     m_TcpSocket.write(command.toStdString().c_str());
 
-        qDebug() << "command.toStdString().c_str() : " << command.toStdString().c_str();
+    qDebug() << "command.toStdString().c_str() : " << command.toStdString().c_str();
 }
 
 void MainWindow::web_Open_Server_View()
@@ -257,7 +290,7 @@ void MainWindow::web_Open_WebCam_View()
 
 void MainWindow::on_Server_Web_Open_clicked()
 {
-     web_Open_Server_View();
+    web_Open_Server_View();
 }
 
 void MainWindow::on_Web_WebCam_View_clicked()
@@ -268,7 +301,7 @@ void MainWindow::on_Web_WebCam_View_clicked()
 
 void MainWindow::on_Server_Rep_Host_clicked()
 {
-//TODO : Clean code :
+    //TODO : Clean code :
 
     QDir repetier_dir_full("C:/Program Files/Repetier-Host");
     QString file = repetier_dir_full.absolutePath() + "/RepetierHost.exe";
