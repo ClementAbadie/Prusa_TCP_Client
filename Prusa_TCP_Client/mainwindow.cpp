@@ -1,11 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     mainWindows(new Ui::MainWindow)
 {
     mainWindows->setupUi(this);
+
+    dui_Options.setupUi(&dialog_Options);
 
     connect(&m_TcpSocket, &QTcpSocket::connected,       this, &MainWindow::onConnected);
     connect(&m_TcpSocket, &QTcpSocket::disconnected,    this, &MainWindow::onDisconnected);
@@ -14,18 +17,25 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tcp_timer, SIGNAL(timeout()), this, SLOT(tcp_timeout()));
 
 
-    mainWindows->comboBox_Server_IP->addItem("192.168.0.5");
-    mainWindows->comboBox_Server_IP->addItem("prusabadie.ddns.net");
-    mainWindows->comboBox_Server_IP->addItem("192.168.0.150");
-    mainWindows->comboBox_Server_IP->addItem("192.168.0.190");
-    mainWindows->comboBox_Server_IP->addItem("192.168.0.25");
+
+    dui_Options.comboBox_Server_IP->addItem("192.168.0.5");
+    dui_Options.comboBox_Server_IP->addItem("prusabadie.ddns.net");
+    dui_Options.comboBox_Server_IP->addItem("192.168.0.150");
+    dui_Options.comboBox_Server_IP->addItem("192.168.0.190");
+    dui_Options.comboBox_Server_IP->addItem("192.168.0.25");
 
 
-    mainWindows->comboBox_Server_Port->addItem("51717");
-    mainWindows->comboBox_Server_Port->addItem("56250");
-    mainWindows->comboBox_Server_Port->addItem("35136");
+    dui_Options.comboBox_Server_Port->addItem("51717");
+    dui_Options.comboBox_Server_Port->addItem("56250");
+    dui_Options.comboBox_Server_Port->addItem("35136");
+
+    MainWindow::initSettings();
 
     Connect_to_Server();
+
+
+
+
 
 }
 
@@ -58,29 +68,40 @@ void MainWindow::on_actionAbout_triggered()
 void MainWindow::on_actionOptions_triggered()
 {
 
-    Ui_Dialog_Server_Options dui;
-    QDialog dialog;
-    dui.setupUi(&dialog);
+
     // some more stuff to setup dialog
 
-    dui.spinBox_timeout_unsaved_time->setValue(tcp_timeout_time_ms);
-    dui.spinBox_Video_res_h->setValue(webcam_res_h);
-    dui.spinBox_Video_res_v->setValue(webcam_res_v);
-    dui.spinBox_Video_framerate->setValue(webcam_framerate);
+    //    dui_Options.spinBox_timeout_unsaved_time->setValue(tcp_timeout_time_ms);
+    //dui_Options.spinBox_Video_res_h->setValue(webcam_res_h);
+    //dui_Options.spinBox_Video_res_v->setValue(webcam_res_v);
+    //dui_Options.spinBox_Video_framerate->setValue(webcam_framerate);
 
-    dialog.show();
 
-    if (dialog.exec() == QDialog::Accepted)
+    //    qDebug() << settings.contains("client_tcp_timeout_time_ms");
+
+    //    dui_Options.spinBox_timeout_unsaved_time->setValue(settings.value("client_tcp_timeout_time_ms",tcp_timeout_time_ms_default).toInt());
+
+    //    qDebug() << settings.contains("client_tcp_timeout_time_ms");
+
+    dialog_Options.show();
+
+    if (dialog_Options.exec() == QDialog::Accepted)
     {
         // store dialog content somewhere
 
     }
 
-    tcp_timeout_time_ms = dui.spinBox_timeout_unsaved_time->value();
-    webcam_res_h = dui.spinBox_Video_res_h->value();
-    webcam_res_v = dui.spinBox_Video_res_v->value();
-    webcam_framerate = dui.spinBox_Video_framerate->value();
+    //tcp_timeout_time_ms = dui_Options.spinBox_timeout_unsaved_time->value();
+    //webcam_res_h = dui_Options.spinBox_Video_res_h->value();
+    //webcam_res_v = dui_Options.spinBox_Video_res_v->value();
+    //webcam_framerate = dui_Options.spinBox_Video_framerate->value();
 
+    //    settings.setValue("client_tcp_timeout_time_ms", dui_Options.spinBox_timeout_unsaved_time->value());
+    //settings.setValue("webcam/webcam_res_v", dui_Options.spinBox_Video_res_h->value());
+    //settings.setValue("webcam/webcam_res_h", dui_Options.spinBox_Video_res_v->value());
+    //settings.setValue("webcam/webcam_framerate", dui_Options.spinBox_Video_framerate->value());
+
+    //   qDebug() << settings.contains("client_tcp_timeout_time_ms");
     qDebug() << "END";
 }
 
@@ -100,7 +121,7 @@ void MainWindow::tmp_timeout(){
     qDebug() << "Request temperature !";
 
     request_to_server_temperature();
-    tmp_timer->start(tmp_timeout_time_ms);
+    tmp_timer->start(tmp_timeout_time_ms_default);
 
 }
 
@@ -109,32 +130,36 @@ void MainWindow::on_PushButton_Connect_to_Server_clicked()
     Connect_to_Server();
 }
 
-void MainWindow::Connect_to_Server()
+bool MainWindow::Connect_to_Server()
 {
     //mainWindows->Server_MSG->setText("");
     mainWindows->statusBar->showMessage("");
     if(!m_TcpSocket_connected)
     {
-        QString server_ip = mainWindows->comboBox_Server_IP->currentText();
-        int server_port = mainWindows->comboBox_Server_Port->currentText().toInt();
+        QString server_ip = dui_Options.comboBox_Server_IP->currentText();
+        int server_port = dui_Options.comboBox_Server_Port->currentText().toInt();
 
         {
             if (m_debug)
-                qDebug() << "TcpSocket server:" << server_ip << ":" << server_port;
+                qDebug() << "TcpSocket server :" << server_ip << ":" << server_port;
 
             //mainWindows->Server_MSG->setText("Connection...");
             mainWindows->statusBar->showMessage("Connection...");
             m_TcpSocket.connectToHost(server_ip,server_port);
 
-            tcp_timer->start(tcp_timeout_time_ms);
+            tcp_timer->start(dui_Options.spinBox_timeout_unsaved_time->value());
 
         }
+
+        return true;
     }
     else
     {
         m_TcpSocket.write("exit");
         m_TcpSocket.close();
+        return false;
     }
+
 }
 
 
@@ -214,9 +239,9 @@ void MainWindow::readyRead()
 
     if(server_msg.startsWith("M100:"))
     {
-            server_msg.remove(0,5);
-            //server_msg.remove(QRegExp("[\\n\\t\\r]"));
-            mainWindows->Server_tmp->setText(server_msg + " °C");
+        server_msg.remove(0,5);
+        //server_msg.remove(QRegExp("[\\n\\t\\r]"));
+        mainWindows->Server_tmp->setText(server_msg + " °C");
     }
     else
     {
@@ -257,20 +282,36 @@ void MainWindow::request_to_server_temperature()
 
 void MainWindow::on_Web_WebCam_Stop_clicked()
 {
-    m_TcpSocket.write("M200");
+
+    if(dui_Options.radioButton_webcam_android->isChecked()){
+
+    }
+    else{
+
+        m_TcpSocket.write("M200");
+    }
+
 }
 
 void MainWindow::on_Web_WebCam_Restart_clicked()
 {
-    QString command = "M201:" + QString::number(webcam_res_h) + ":" + QString::number(webcam_res_v) + ":" + QString::number(webcam_framerate);
-    m_TcpSocket.write(command.toStdString().c_str());
 
-    qDebug() << "command.toStdString().c_str() : " << command.toStdString().c_str();
+    if(dui_Options.radioButton_webcam_android->isChecked()){
+
+    }
+    else{
+        QString command = "M201:" + QString::number(dui_Options.spinBox_Video_res_h->value()) + ":" + QString::number(dui_Options.spinBox_Video_res_v->value()) + ":" + QString::number(dui_Options.spinBox_Video_framerate->value());
+        m_TcpSocket.write(command.toStdString().c_str());
+
+        qDebug() << "command.toStdString().c_str() : " << command.toStdString().c_str();
+    }
+
+
 }
 
 void MainWindow::web_Open_Server_View()
 {
-    QString server_ip = mainWindows->comboBox_Server_IP->currentText();
+    QString server_ip = dui_Options.comboBox_Server_IP->currentText();
     QString web_server_url = "http://" + server_ip + ":" + WEB_SERVER_PORT;
 
     if (m_debug)
@@ -281,8 +322,19 @@ void MainWindow::web_Open_Server_View()
 
 void MainWindow::web_Open_WebCam_View()
 {
-    QString server_ip = mainWindows->comboBox_Server_IP->currentText();
-    QString web_server_url = "http://" + server_ip + ":" + WEB_WEBCAM_PORT + "/stream";
+
+    QString server_ip;
+    QString web_server_url;
+
+    if(dui_Options.radioButton_webcam_android->isChecked()){
+        server_ip = "prusabadie.ddns.net";
+        web_server_url = "https://" + server_ip + ":" + WEB_WEBCAM_PORT + "/flash.html";
+    }
+    else{
+
+        server_ip = dui_Options.comboBox_Server_IP->currentText();
+        web_server_url = "http://" + server_ip + ":" + WEB_WEBCAM_PORT + "/stream";
+    }
 
     if (m_debug)
         qDebug() << "web_server_url" << web_server_url;
@@ -317,7 +369,75 @@ void MainWindow::on_Server_Rep_Host_clicked()
 }
 
 
+void MainWindow::resetSettings()
+{
+
+    qDebug() << "Reseting settings...";
+
+    QSettings settings(settings_file_name, QSettings::IniFormat);
+
+    settings.setValue("client_tcp_timeout_time_ms", tcp_timeout_time_ms_default);
+    settings.setValue("client_tmp_timeout_time_ms", tmp_timeout_time_ms_default);
+    settings.setValue("spinBox_Video_res_h",webcam_res_h_default);
+    settings.setValue("spinBox_Video_res_v",webcam_res_v_default);
+    settings.setValue("spinBox_Video_framerate",webcam_framerate_default);
+    settings.setValue("WEB_SERVER_PORT",WEB_SERVER_PORT);
+    settings.setValue("WEB_WEBCAM_PORT",WEB_WEBCAM_PORT);
+
+    qDebug() << "Settings reseted !";
+}
+
+void MainWindow::initSettings()
+{
+    QCoreApplication::setOrganizationName("ClementABADIE");
+    QCoreApplication::setOrganizationDomain("clementabadie.com");
+    QCoreApplication::setApplicationName("PrusaClient");
+
+    QSettings settings(settings_file_name, QSettings::IniFormat);
+
+    dui_Options.spinBox_timeout_unsaved_time->setValue(settings.value("client_tcp_timeout_time_ms",tcp_timeout_time_ms_default).toInt());
+    //    dui_Options.spinBox_timeout_unsaved_time->setValue(settings.value("client_tmp_timeout_time_ms"),tmp_timeout_time_ms_default);
+    dui_Options.spinBox_Video_res_h->setValue(settings.value("spinBox_Video_res_h",webcam_res_h_default).toInt());
+    dui_Options.spinBox_Video_res_v->setValue(settings.value("spinBox_Video_res_v",webcam_res_v_default).toInt());
+    dui_Options.spinBox_Video_framerate->setValue(settings.value("spinBox_Video_framerate",webcam_framerate_default).toInt());
+
+    dui_Options.comboBox_Server_IP->setCurrentText(settings.value("comboBox_Server_IP").toString());
+    dui_Options.comboBox_Server_Port->setCurrentText(settings.value("comboBox_Server_Port").toString());
 
 
+//    dui_Options.comboBox_Server_IP->setCurrentIndex(settings.value("comboBox_Server_IP_index").toInt());
+//    dui_Options.comboBox_Server_Port->setCurrentIndex(settings.value("comboBox_Server_Port_index").toInt());
+
+}
+
+void MainWindow::saveSettings()
+{
+
+    qDebug() << "Saving settings...";
+
+    QSettings settings(settings_file_name, QSettings::IniFormat);
+
+    settings.setValue("client_tcp_timeout_time_ms", dui_Options.spinBox_timeout_unsaved_time->value());
+    //    settings.setValue("client_tmp_timeout_time_ms", tmp_timeout_time_ms_default);
+    settings.setValue("spinBox_Video_res_h",dui_Options.spinBox_Video_res_h->value());
+    settings.setValue("spinBox_Video_res_v",dui_Options.spinBox_Video_res_v->value());
+    settings.setValue("spinBox_Video_framerate",dui_Options.spinBox_Video_framerate->value());
+
+    settings.setValue("comboBox_Server_IP",dui_Options.comboBox_Server_IP->currentText());
+    settings.setValue("comboBox_Server_Port",dui_Options.comboBox_Server_Port->currentText());
+
+    settings.setValue("comboBox_Server_IP_index",dui_Options.comboBox_Server_IP->currentIndex());
+    settings.setValue("comboBox_Server_Port_index",dui_Options.comboBox_Server_Port->currentIndex());
+    //    settings.setValue("WEB_SERVER_PORT",WEB_SERVER_PORT);
+    //    settings.setValue("WEB_WEBCAM_PORT",WEB_WEBCAM_PORT);
+
+    qDebug() << "Done !";
 
 
+}
+
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    MainWindow::saveSettings();
+}
