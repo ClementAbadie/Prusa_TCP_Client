@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QComboBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
@@ -31,10 +30,7 @@ public:
     QAction *actionOptions;
     QAction *actionAbout;
     QWidget *centralWidget;
-    QComboBox *comboBox_Server_IP;
     QPushButton *PushButton_Connect_to_Server;
-    QComboBox *comboBox_Server_Port;
-    QLabel *Server_IP_PORT_separator;
     QLabel *server_label;
     QLabel *prusa_label;
     QPushButton *Server_Stop;
@@ -66,24 +62,13 @@ public:
         actionAbout->setObjectName(QStringLiteral("actionAbout"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        comboBox_Server_IP = new QComboBox(centralWidget);
-        comboBox_Server_IP->setObjectName(QStringLiteral("comboBox_Server_IP"));
-        comboBox_Server_IP->setGeometry(QRect(10, 10, 131, 22));
-        comboBox_Server_IP->setEditable(true);
         PushButton_Connect_to_Server = new QPushButton(centralWidget);
         PushButton_Connect_to_Server->setObjectName(QStringLiteral("PushButton_Connect_to_Server"));
-        PushButton_Connect_to_Server->setGeometry(QRect(220, 10, 75, 23));
+        PushButton_Connect_to_Server->setGeometry(QRect(80, 12, 171, 31));
         PushButton_Connect_to_Server->setCheckable(false);
         PushButton_Connect_to_Server->setChecked(false);
         PushButton_Connect_to_Server->setAutoDefault(true);
         PushButton_Connect_to_Server->setFlat(false);
-        comboBox_Server_Port = new QComboBox(centralWidget);
-        comboBox_Server_Port->setObjectName(QStringLiteral("comboBox_Server_Port"));
-        comboBox_Server_Port->setGeometry(QRect(150, 10, 61, 22));
-        comboBox_Server_Port->setEditable(true);
-        Server_IP_PORT_separator = new QLabel(centralWidget);
-        Server_IP_PORT_separator->setObjectName(QStringLiteral("Server_IP_PORT_separator"));
-        Server_IP_PORT_separator->setGeometry(QRect(140, 10, 16, 21));
         server_label = new QLabel(centralWidget);
         server_label->setObjectName(QStringLiteral("server_label"));
         server_label->setGeometry(QRect(10, 90, 61, 31));
@@ -136,10 +121,7 @@ public:
         Web_WebCam_Stop->setEnabled(false);
         Web_WebCam_Stop->setGeometry(QRect(210, 130, 41, 31));
         MainWindow->setCentralWidget(centralWidget);
-        comboBox_Server_IP->raise();
         PushButton_Connect_to_Server->raise();
-        comboBox_Server_Port->raise();
-        Server_IP_PORT_separator->raise();
         server_label->raise();
         prusa_label->raise();
         Server_Stop->raise();
@@ -184,13 +166,10 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Raspberry Pi - 3D Printer - Client", Q_NULLPTR));
         actionOptions->setText(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
         actionAbout->setText(QApplication::translate("MainWindow", "About...", Q_NULLPTR));
-        comboBox_Server_IP->setCurrentText(QApplication::translate("MainWindow", "prusabadie.ddns.net", Q_NULLPTR));
         PushButton_Connect_to_Server->setText(QApplication::translate("MainWindow", "Connection", Q_NULLPTR));
 #ifndef QT_NO_SHORTCUT
         PushButton_Connect_to_Server->setShortcut(QApplication::translate("MainWindow", "Return", Q_NULLPTR));
 #endif // QT_NO_SHORTCUT
-        comboBox_Server_Port->setCurrentText(QApplication::translate("MainWindow", "51717", Q_NULLPTR));
-        Server_IP_PORT_separator->setText(QApplication::translate("MainWindow", " :", Q_NULLPTR));
         server_label->setText(QApplication::translate("MainWindow", "Server :", Q_NULLPTR));
         prusa_label->setText(QApplication::translate("MainWindow", "3D Printer :", Q_NULLPTR));
         Server_Stop->setText(QApplication::translate("MainWindow", "STOP", Q_NULLPTR));

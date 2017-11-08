@@ -13,10 +13,12 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpinBox>
 
 QT_BEGIN_NAMESPACE
@@ -33,62 +35,103 @@ public:
     QLabel *label_timeout_2;
     QSpinBox *spinBox_Video_framerate;
     QLabel *server_label_4;
+    QRadioButton *radioButton_webcam_android;
+    QRadioButton *radioButton_webcam_pi;
+    QComboBox *comboBox_Server_Port;
+    QComboBox *comboBox_Server_IP_Distant;
+    QLabel *Server_IP_PORT_separator;
+    QComboBox *comboBox_Server_IP_Local;
+    QLabel *label_timeout_3;
+    QLabel *label_timeout_4;
 
     void setupUi(QDialog *Dialog_Server_Options)
     {
         if (Dialog_Server_Options->objectName().isEmpty())
             Dialog_Server_Options->setObjectName(QStringLiteral("Dialog_Server_Options"));
         Dialog_Server_Options->setWindowModality(Qt::WindowModal);
-        Dialog_Server_Options->resize(274, 135);
+        Dialog_Server_Options->resize(379, 209);
         Dialog_Server_Options->setModal(true);
         buttonBox = new QDialogButtonBox(Dialog_Server_Options);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setGeometry(QRect(20, 90, 241, 32));
+        buttonBox->setGeometry(QRect(10, 170, 361, 32));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Ok);
         label_timeout = new QLabel(Dialog_Server_Options);
         label_timeout->setObjectName(QStringLiteral("label_timeout"));
-        label_timeout->setGeometry(QRect(50, 20, 131, 21));
+        label_timeout->setGeometry(QRect(50, 80, 131, 21));
         label_timeout->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBox_timeout_unsaved_time = new QSpinBox(Dialog_Server_Options);
         spinBox_timeout_unsaved_time->setObjectName(QStringLiteral("spinBox_timeout_unsaved_time"));
-        spinBox_timeout_unsaved_time->setGeometry(QRect(190, 20, 71, 22));
+        spinBox_timeout_unsaved_time->setGeometry(QRect(190, 80, 71, 22));
         spinBox_timeout_unsaved_time->setMinimum(500);
         spinBox_timeout_unsaved_time->setMaximum(10000);
         spinBox_timeout_unsaved_time->setSingleStep(1000);
         spinBox_timeout_unsaved_time->setValue(1000);
         spinBox_Video_res_h = new QSpinBox(Dialog_Server_Options);
         spinBox_Video_res_h->setObjectName(QStringLiteral("spinBox_Video_res_h"));
-        spinBox_Video_res_h->setGeometry(QRect(80, 60, 51, 21));
+        spinBox_Video_res_h->setEnabled(true);
+        spinBox_Video_res_h->setGeometry(QRect(160, 140, 51, 21));
         spinBox_Video_res_h->setMinimum(480);
         spinBox_Video_res_h->setMaximum(1920);
         spinBox_Video_res_h->setValue(1280);
         server_label_3 = new QLabel(Dialog_Server_Options);
         server_label_3->setObjectName(QStringLiteral("server_label_3"));
-        server_label_3->setGeometry(QRect(130, 60, 21, 21));
+        server_label_3->setGeometry(QRect(210, 140, 21, 21));
         server_label_3->setAlignment(Qt::AlignCenter);
         server_label_3->setTextInteractionFlags(Qt::NoTextInteraction);
         spinBox_Video_res_v = new QSpinBox(Dialog_Server_Options);
         spinBox_Video_res_v->setObjectName(QStringLiteral("spinBox_Video_res_v"));
-        spinBox_Video_res_v->setGeometry(QRect(150, 60, 51, 21));
+        spinBox_Video_res_v->setEnabled(true);
+        spinBox_Video_res_v->setGeometry(QRect(230, 140, 51, 21));
         spinBox_Video_res_v->setMinimum(320);
         spinBox_Video_res_v->setMaximum(1080);
         spinBox_Video_res_v->setValue(720);
         label_timeout_2 = new QLabel(Dialog_Server_Options);
         label_timeout_2->setObjectName(QStringLiteral("label_timeout_2"));
-        label_timeout_2->setGeometry(QRect(10, 60, 61, 21));
+        label_timeout_2->setGeometry(QRect(10, 120, 61, 16));
         label_timeout_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBox_Video_framerate = new QSpinBox(Dialog_Server_Options);
         spinBox_Video_framerate->setObjectName(QStringLiteral("spinBox_Video_framerate"));
-        spinBox_Video_framerate->setGeometry(QRect(220, 60, 41, 21));
+        spinBox_Video_framerate->setEnabled(true);
+        spinBox_Video_framerate->setGeometry(QRect(300, 140, 41, 21));
         spinBox_Video_framerate->setMinimum(2);
         spinBox_Video_framerate->setMaximum(90);
         spinBox_Video_framerate->setValue(20);
         server_label_4 = new QLabel(Dialog_Server_Options);
         server_label_4->setObjectName(QStringLiteral("server_label_4"));
-        server_label_4->setGeometry(QRect(200, 60, 21, 21));
+        server_label_4->setGeometry(QRect(280, 140, 21, 21));
         server_label_4->setAlignment(Qt::AlignCenter);
         server_label_4->setTextInteractionFlags(Qt::NoTextInteraction);
+        radioButton_webcam_android = new QRadioButton(Dialog_Server_Options);
+        radioButton_webcam_android->setObjectName(QStringLiteral("radioButton_webcam_android"));
+        radioButton_webcam_android->setGeometry(QRect(80, 120, 141, 19));
+        radioButton_webcam_android->setChecked(true);
+        radioButton_webcam_pi = new QRadioButton(Dialog_Server_Options);
+        radioButton_webcam_pi->setObjectName(QStringLiteral("radioButton_webcam_pi"));
+        radioButton_webcam_pi->setGeometry(QRect(80, 140, 71, 21));
+        comboBox_Server_Port = new QComboBox(Dialog_Server_Options);
+        comboBox_Server_Port->setObjectName(QStringLiteral("comboBox_Server_Port"));
+        comboBox_Server_Port->setGeometry(QRect(300, 11, 61, 51));
+        comboBox_Server_Port->setEditable(true);
+        comboBox_Server_IP_Distant = new QComboBox(Dialog_Server_Options);
+        comboBox_Server_IP_Distant->setObjectName(QStringLiteral("comboBox_Server_IP_Distant"));
+        comboBox_Server_IP_Distant->setGeometry(QRect(160, 10, 131, 22));
+        comboBox_Server_IP_Distant->setEditable(true);
+        Server_IP_PORT_separator = new QLabel(Dialog_Server_Options);
+        Server_IP_PORT_separator->setObjectName(QStringLiteral("Server_IP_PORT_separator"));
+        Server_IP_PORT_separator->setGeometry(QRect(290, 10, 16, 51));
+        comboBox_Server_IP_Local = new QComboBox(Dialog_Server_Options);
+        comboBox_Server_IP_Local->setObjectName(QStringLiteral("comboBox_Server_IP_Local"));
+        comboBox_Server_IP_Local->setGeometry(QRect(160, 40, 131, 22));
+        comboBox_Server_IP_Local->setEditable(true);
+        label_timeout_3 = new QLabel(Dialog_Server_Options);
+        label_timeout_3->setObjectName(QStringLiteral("label_timeout_3"));
+        label_timeout_3->setGeometry(QRect(20, 10, 131, 20));
+        label_timeout_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        label_timeout_4 = new QLabel(Dialog_Server_Options);
+        label_timeout_4->setObjectName(QStringLiteral("label_timeout_4"));
+        label_timeout_4->setGeometry(QRect(20, 40, 131, 20));
+        label_timeout_4->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         retranslateUi(Dialog_Server_Options);
         QObject::connect(buttonBox, SIGNAL(accepted()), Dialog_Server_Options, SLOT(accept()));
@@ -104,6 +147,14 @@ public:
         server_label_3->setText(QApplication::translate("Dialog_Server_Options", "x", Q_NULLPTR));
         label_timeout_2->setText(QApplication::translate("Dialog_Server_Options", "WebCam :", Q_NULLPTR));
         server_label_4->setText(QApplication::translate("Dialog_Server_Options", "@", Q_NULLPTR));
+        radioButton_webcam_android->setText(QApplication::translate("Dialog_Server_Options", "Android  (IP WebCam)", Q_NULLPTR));
+        radioButton_webcam_pi->setText(QApplication::translate("Dialog_Server_Options", "Camera Pi", Q_NULLPTR));
+        comboBox_Server_Port->setCurrentText(QApplication::translate("Dialog_Server_Options", "51717", Q_NULLPTR));
+        comboBox_Server_IP_Distant->setCurrentText(QApplication::translate("Dialog_Server_Options", "your IP here", Q_NULLPTR));
+        Server_IP_PORT_separator->setText(QApplication::translate("Dialog_Server_Options", " :", Q_NULLPTR));
+        comboBox_Server_IP_Local->setCurrentText(QApplication::translate("Dialog_Server_Options", "your IP here", Q_NULLPTR));
+        label_timeout_3->setText(QApplication::translate("Dialog_Server_Options", "Distant server :", Q_NULLPTR));
+        label_timeout_4->setText(QApplication::translate("Dialog_Server_Options", "Local server :", Q_NULLPTR));
     } // retranslateUi
 
 };

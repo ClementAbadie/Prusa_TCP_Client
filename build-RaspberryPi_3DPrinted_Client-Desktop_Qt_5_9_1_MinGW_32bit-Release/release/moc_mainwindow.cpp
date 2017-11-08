@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[25];
-    char stringdata0[502];
+    QByteArrayData data[30];
+    char stringdata0[621];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -43,19 +43,24 @@ QT_MOC_LITERAL(8, 133, 7), // "message"
 QT_MOC_LITERAL(9, 141, 9), // "readyRead"
 QT_MOC_LITERAL(10, 151, 11), // "tcp_timeout"
 QT_MOC_LITERAL(11, 163, 11), // "tmp_timeout"
-QT_MOC_LITERAL(12, 175, 19), // "on_Prusa_ON_clicked"
-QT_MOC_LITERAL(13, 195, 20), // "on_Prusa_OFF_clicked"
-QT_MOC_LITERAL(14, 216, 22), // "on_Server_Stop_clicked"
-QT_MOC_LITERAL(15, 239, 25), // "on_Server_ReStart_clicked"
-QT_MOC_LITERAL(16, 265, 29), // "request_to_server_temperature"
-QT_MOC_LITERAL(17, 295, 26), // "on_actionOptions_triggered"
-QT_MOC_LITERAL(18, 322, 20), // "web_Open_WebCam_View"
-QT_MOC_LITERAL(19, 343, 20), // "web_Open_Server_View"
-QT_MOC_LITERAL(20, 364, 26), // "on_Server_Web_Open_clicked"
-QT_MOC_LITERAL(21, 391, 26), // "on_Server_Rep_Host_clicked"
-QT_MOC_LITERAL(22, 418, 26), // "on_Web_WebCam_View_clicked"
-QT_MOC_LITERAL(23, 445, 29), // "on_Web_WebCam_Restart_clicked"
-QT_MOC_LITERAL(24, 475, 26) // "on_Web_WebCam_Stop_clicked"
+QT_MOC_LITERAL(12, 175, 19), // "onConnected_distant"
+QT_MOC_LITERAL(13, 195, 22), // "onDisconnected_distant"
+QT_MOC_LITERAL(14, 218, 17), // "onConnected_local"
+QT_MOC_LITERAL(15, 236, 20), // "onDisconnected_local"
+QT_MOC_LITERAL(16, 257, 19), // "on_Prusa_ON_clicked"
+QT_MOC_LITERAL(17, 277, 20), // "on_Prusa_OFF_clicked"
+QT_MOC_LITERAL(18, 298, 22), // "on_Server_Stop_clicked"
+QT_MOC_LITERAL(19, 321, 25), // "on_Server_ReStart_clicked"
+QT_MOC_LITERAL(20, 347, 29), // "request_to_server_temperature"
+QT_MOC_LITERAL(21, 377, 26), // "on_actionOptions_triggered"
+QT_MOC_LITERAL(22, 404, 20), // "web_Open_WebCam_View"
+QT_MOC_LITERAL(23, 425, 20), // "web_Open_Server_View"
+QT_MOC_LITERAL(24, 446, 26), // "on_Server_Web_Open_clicked"
+QT_MOC_LITERAL(25, 473, 26), // "on_Server_Rep_Host_clicked"
+QT_MOC_LITERAL(26, 500, 26), // "on_Web_WebCam_View_clicked"
+QT_MOC_LITERAL(27, 527, 29), // "on_Web_WebCam_Restart_clicked"
+QT_MOC_LITERAL(28, 557, 26), // "on_Web_WebCam_Stop_clicked"
+QT_MOC_LITERAL(29, 584, 36) // "on_pushButton_reset_settings_..."
 
     },
     "MainWindow\0closed\0\0"
@@ -63,6 +68,8 @@ QT_MOC_LITERAL(24, 475, 26) // "on_Web_WebCam_Stop_clicked"
     "on_actionAbout_triggered\0onConnected\0"
     "onDisconnected\0onTextMessageReceived\0"
     "message\0readyRead\0tcp_timeout\0tmp_timeout\0"
+    "onConnected_distant\0onDisconnected_distant\0"
+    "onConnected_local\0onDisconnected_local\0"
     "on_Prusa_ON_clicked\0on_Prusa_OFF_clicked\0"
     "on_Server_Stop_clicked\0on_Server_ReStart_clicked\0"
     "request_to_server_temperature\0"
@@ -72,7 +79,8 @@ QT_MOC_LITERAL(24, 475, 26) // "on_Web_WebCam_Stop_clicked"
     "on_Server_Rep_Host_clicked\0"
     "on_Web_WebCam_View_clicked\0"
     "on_Web_WebCam_Restart_clicked\0"
-    "on_Web_WebCam_Stop_clicked"
+    "on_Web_WebCam_Stop_clicked\0"
+    "on_pushButton_reset_settings_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -82,7 +90,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      22,   14, // methods
+      27,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -90,30 +98,35 @@ static const uint qt_meta_data_MainWindow[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  124,    2, 0x06 /* Public */,
+       1,    0,  149,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       3,    0,  125,    2, 0x08 /* Private */,
-       4,    0,  126,    2, 0x08 /* Private */,
-       5,    0,  127,    2, 0x08 /* Private */,
-       6,    0,  128,    2, 0x08 /* Private */,
-       7,    1,  129,    2, 0x08 /* Private */,
-       9,    0,  132,    2, 0x08 /* Private */,
-      10,    0,  133,    2, 0x08 /* Private */,
-      11,    0,  134,    2, 0x08 /* Private */,
-      12,    0,  135,    2, 0x08 /* Private */,
-      13,    0,  136,    2, 0x08 /* Private */,
-      14,    0,  137,    2, 0x08 /* Private */,
-      15,    0,  138,    2, 0x08 /* Private */,
-      16,    0,  139,    2, 0x08 /* Private */,
-      17,    0,  140,    2, 0x08 /* Private */,
-      18,    0,  141,    2, 0x08 /* Private */,
-      19,    0,  142,    2, 0x08 /* Private */,
-      20,    0,  143,    2, 0x08 /* Private */,
-      21,    0,  144,    2, 0x08 /* Private */,
-      22,    0,  145,    2, 0x08 /* Private */,
-      23,    0,  146,    2, 0x08 /* Private */,
-      24,    0,  147,    2, 0x08 /* Private */,
+       3,    0,  150,    2, 0x08 /* Private */,
+       4,    0,  151,    2, 0x08 /* Private */,
+       5,    0,  152,    2, 0x08 /* Private */,
+       6,    0,  153,    2, 0x08 /* Private */,
+       7,    1,  154,    2, 0x08 /* Private */,
+       9,    0,  157,    2, 0x08 /* Private */,
+      10,    0,  158,    2, 0x08 /* Private */,
+      11,    0,  159,    2, 0x08 /* Private */,
+      12,    0,  160,    2, 0x08 /* Private */,
+      13,    0,  161,    2, 0x08 /* Private */,
+      14,    0,  162,    2, 0x08 /* Private */,
+      15,    0,  163,    2, 0x08 /* Private */,
+      16,    0,  164,    2, 0x08 /* Private */,
+      17,    0,  165,    2, 0x08 /* Private */,
+      18,    0,  166,    2, 0x08 /* Private */,
+      19,    0,  167,    2, 0x08 /* Private */,
+      20,    0,  168,    2, 0x08 /* Private */,
+      21,    0,  169,    2, 0x08 /* Private */,
+      22,    0,  170,    2, 0x08 /* Private */,
+      23,    0,  171,    2, 0x08 /* Private */,
+      24,    0,  172,    2, 0x08 /* Private */,
+      25,    0,  173,    2, 0x08 /* Private */,
+      26,    0,  174,    2, 0x08 /* Private */,
+      27,    0,  175,    2, 0x08 /* Private */,
+      28,    0,  176,    2, 0x08 /* Private */,
+      29,    0,  177,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -124,6 +137,11 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    8,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -159,19 +177,24 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 6: _t->readyRead(); break;
         case 7: _t->tcp_timeout(); break;
         case 8: _t->tmp_timeout(); break;
-        case 9: _t->on_Prusa_ON_clicked(); break;
-        case 10: _t->on_Prusa_OFF_clicked(); break;
-        case 11: _t->on_Server_Stop_clicked(); break;
-        case 12: _t->on_Server_ReStart_clicked(); break;
-        case 13: _t->request_to_server_temperature(); break;
-        case 14: _t->on_actionOptions_triggered(); break;
-        case 15: _t->web_Open_WebCam_View(); break;
-        case 16: _t->web_Open_Server_View(); break;
-        case 17: _t->on_Server_Web_Open_clicked(); break;
-        case 18: _t->on_Server_Rep_Host_clicked(); break;
-        case 19: _t->on_Web_WebCam_View_clicked(); break;
-        case 20: _t->on_Web_WebCam_Restart_clicked(); break;
-        case 21: _t->on_Web_WebCam_Stop_clicked(); break;
+        case 9: _t->onConnected_distant(); break;
+        case 10: _t->onDisconnected_distant(); break;
+        case 11: _t->onConnected_local(); break;
+        case 12: _t->onDisconnected_local(); break;
+        case 13: _t->on_Prusa_ON_clicked(); break;
+        case 14: _t->on_Prusa_OFF_clicked(); break;
+        case 15: _t->on_Server_Stop_clicked(); break;
+        case 16: _t->on_Server_ReStart_clicked(); break;
+        case 17: _t->request_to_server_temperature(); break;
+        case 18: _t->on_actionOptions_triggered(); break;
+        case 19: _t->web_Open_WebCam_View(); break;
+        case 20: _t->web_Open_Server_View(); break;
+        case 21: _t->on_Server_Web_Open_clicked(); break;
+        case 22: _t->on_Server_Rep_Host_clicked(); break;
+        case 23: _t->on_Web_WebCam_View_clicked(); break;
+        case 24: _t->on_Web_WebCam_Restart_clicked(); break;
+        case 25: _t->on_Web_WebCam_Stop_clicked(); break;
+        case 26: _t->on_pushButton_reset_settings_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -212,13 +235,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 22)
+        if (_id < 27)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 22;
+        _id -= 27;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 22)
+        if (_id < 27)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 22;
+        _id -= 27;
     }
     return _id;
 }

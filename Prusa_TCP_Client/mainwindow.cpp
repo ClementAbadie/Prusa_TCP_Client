@@ -214,7 +214,8 @@ void MainWindow::onConnected_distant()
     if (m_debug)
         qDebug() << "TcpSocket_distant connected";
 
-
+//    mainWindows->statusBar->showMessage("Connected ! (Distant)");
+        mainWindows->PushButton_Connect_to_Server->setText("Disconnect (Distant)");
     m_TcpSocket = m_TcpSocket_distant;
     MainWindow::onConnected();
 }
@@ -226,7 +227,8 @@ void MainWindow::onConnected_local()
 
     if (m_debug)
         qDebug() << "TcpSocket_local connected";
-
+//    mainWindows->statusBar->showMessage("Connected ! (Local)");
+        mainWindows->PushButton_Connect_to_Server->setText("Disconnect (Local)");
     m_TcpSocket = m_TcpSocket_local;
     MainWindow::onConnected();
 }
@@ -235,8 +237,7 @@ void MainWindow::onConnected_local()
 void MainWindow::onConnected()
 {
     tcp_timer->stop();
-    mainWindows->PushButton_Connect_to_Server->setText("Disconnect");
-    mainWindows->statusBar->showMessage("Connected !");
+//    mainWindows->PushButton_Connect_to_Server->setText("Disconnect");
     m_TcpSocket_connected = true;
 
 
@@ -490,6 +491,9 @@ void MainWindow::initSettings()
 
     QSettings settings(settings_file_name, QSettings::IniFormat);
 
+
+    qDebug() << "QSettings path : " << settings.fileName();
+
     dui_Options.spinBox_timeout_unsaved_time->setValue(settings.value("client_tcp_timeout_time_ms",tcp_timeout_time_ms_default).toInt());
     //    dui_Options.spinBox_timeout_unsaved_time->setValue(settings.value("client_tmp_timeout_time_ms"),tmp_timeout_time_ms_default);
     dui_Options.spinBox_Video_res_h->setValue(settings.value("spinBox_Video_res_h",webcam_res_h_default).toInt());
@@ -513,6 +517,7 @@ void MainWindow::saveSettings()
     qDebug() << "Saving settings...";
 
     QSettings settings(settings_file_name, QSettings::IniFormat);
+
 
     settings.setValue("client_tcp_timeout_time_ms", dui_Options.spinBox_timeout_unsaved_time->value());
     //    settings.setValue("client_tmp_timeout_time_ms", tmp_timeout_time_ms_default);

@@ -50,7 +50,7 @@ public:
         label_2->setTextInteractionFlags(Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse);
         label_3 = new QLabel(Dialog_About);
         label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setGeometry(QRect(70, 40, 141, 16));
+        label_3->setGeometry(QRect(20, 60, 171, 16));
         label_3->setOpenExternalLinks(true);
         label_3->setTextInteractionFlags(Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse);
         label_4 = new QLabel(Dialog_About);
@@ -75,8 +75,8 @@ public:
     {
         Dialog_About->setWindowTitle(QApplication::translate("Dialog_About", "About...", Q_NULLPTR));
         label->setText(QApplication::translate("Dialog_About", "Author :   Cl\303\251ment ABADIE", Q_NULLPTR));
-        label_2->setText(QApplication::translate("Dialog_About", "e-Mail :", Q_NULLPTR));
-        label_3->setText(QApplication::translate("Dialog_About", "cle.abadie@gmail.com", Q_NULLPTR));
+        label_2->setText(QApplication::translate("Dialog_About", "GitHub :", Q_NULLPTR));
+        label_3->setText(QApplication::translate("Dialog_About", "https://github.com/ClementAbadie", Q_NULLPTR));
         label_4->setText(QApplication::translate("Dialog_About", "Version :", Q_NULLPTR));
         label_version->setText(QApplication::translate("Dialog_About", "0.0", Q_NULLPTR));
     } // retranslateUi
