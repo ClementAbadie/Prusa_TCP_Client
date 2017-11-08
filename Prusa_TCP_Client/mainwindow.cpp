@@ -10,22 +10,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dui_Options.setupUi(&dialog_Options);
 
-    connect(m_TcpSocket, &QTcpSocket::connected,       this, &MainWindow::onConnected);
-    connect(m_TcpSocket, &QTcpSocket::disconnected,    this, &MainWindow::onDisconnected);
-    connect(m_TcpSocket, &QTcpSocket::readyRead,       this, &MainWindow::readyRead);
+    connect(m_TcpSocket, &QTcpSocket::connected,                this, &MainWindow::onConnected);
+    connect(m_TcpSocket, &QTcpSocket::disconnected,             this, &MainWindow::onDisconnected);
+    connect(m_TcpSocket, &QTcpSocket::readyRead,                this, &MainWindow::readyRead);
 
-    connect(m_TcpSocket_distant, &QTcpSocket::connected,       this, &MainWindow::onConnected_distant);
-    connect(m_TcpSocket_distant, &QTcpSocket::disconnected,    this, &MainWindow::onDisconnected_distant);
-    connect(m_TcpSocket_distant, &QTcpSocket::readyRead,       this, &MainWindow::readyRead);
+    connect(m_TcpSocket_distant, &QTcpSocket::connected,        this, &MainWindow::onConnected_distant);
+    connect(m_TcpSocket_distant, &QTcpSocket::disconnected,     this, &MainWindow::onDisconnected_distant);
+    connect(m_TcpSocket_distant, &QTcpSocket::readyRead,        this, &MainWindow::readyRead);
 
-    connect(m_TcpSocket_local, &QTcpSocket::connected,       this, &MainWindow::onConnected_local);
-    connect(m_TcpSocket_local, &QTcpSocket::disconnected,    this, &MainWindow::onDisconnected_local);
-    connect(m_TcpSocket_local, &QTcpSocket::readyRead,       this, &MainWindow::readyRead);
+    connect(m_TcpSocket_local, &QTcpSocket::connected,          this, &MainWindow::onConnected_local);
+    connect(m_TcpSocket_local, &QTcpSocket::disconnected,       this, &MainWindow::onDisconnected_local);
+    connect(m_TcpSocket_local, &QTcpSocket::readyRead,          this, &MainWindow::readyRead);
 
     connect(tcp_timer, SIGNAL(timeout()), this, SLOT(tcp_timeout()));
     connect(tmp_timer, SIGNAL(timeout()), this, SLOT(tmp_timeout()));
-
-    //    dui_Options.comboBox_Server_IP_Distant->addItem("prusabadie.ddns.net");
 
     dui_Options.comboBox_Server_IP_Local->addItem("192.168.0.5");
     dui_Options.comboBox_Server_IP_Local->addItem("192.168.0.150");
@@ -71,6 +69,8 @@ void MainWindow::on_actionAbout_triggered()
         // store dialog content somewhere
 
     }
+
+
     qDebug() << "END";
 }
 
@@ -87,6 +87,9 @@ void MainWindow::on_actionOptions_triggered()
         // store dialog content somewhere
 
     }
+
+    mainWindows->Web_WebCam_Restart->setEnabled(dui_Options.radioButton_webcam_pi->isChecked());
+    mainWindows->Web_WebCam_Stop->setEnabled(dui_Options.radioButton_webcam_pi->isChecked());
 
     qDebug() << "END";
 }
@@ -247,8 +250,8 @@ void MainWindow::onConnected()
     mainWindows->Prusa_OFF->setEnabled(true);
     mainWindows->Server_Stop->setEnabled(true);
     mainWindows->Server_ReStart->setEnabled(true);
-    mainWindows->Web_WebCam_Restart->setEnabled(true);
-    mainWindows->Web_WebCam_Stop->setEnabled(true);
+    mainWindows->Web_WebCam_Restart->setEnabled(dui_Options.radioButton_webcam_pi->isChecked());
+    mainWindows->Web_WebCam_Stop->setEnabled(dui_Options.radioButton_webcam_pi->isChecked());
 }
 //! [onConnected]
 
@@ -458,13 +461,23 @@ void MainWindow::resetSettings()
 
     QSettings settings(settings_file_name, QSettings::IniFormat);
 
-    settings.setValue("client_tcp_timeout_time_ms", tcp_timeout_time_ms_default);
-    settings.setValue("client_tmp_timeout_time_ms", tmp_timeout_time_ms_default);
-    settings.setValue("spinBox_Video_res_h",webcam_res_h_default);
-    settings.setValue("spinBox_Video_res_v",webcam_res_v_default);
-    settings.setValue("spinBox_Video_framerate",webcam_framerate_default);
-    settings.setValue("WEB_SERVER_PORT",WEB_SERVER_PORT);
-    settings.setValue("WEB_WEBCAM_PORT",WEB_WEBCAM_PORT);
+//    settings.setValue("client_tcp_timeout_time_ms", tcp_timeout_time_ms_default);
+//    settings.setValue("client_tmp_timeout_time_ms", tmp_timeout_time_ms_default);
+//    settings.setValue("spinBox_Video_res_h",webcam_res_h_default);
+//    settings.setValue("spinBox_Video_res_v",webcam_res_v_default);
+//    settings.setValue("spinBox_Video_framerate",webcam_framerate_default);
+//    settings.setValue("WEB_SERVER_PORT",WEB_SERVER_PORT);
+//    settings.setValue("WEB_WEBCAM_PORT",WEB_WEBCAM_PORT);
+
+
+    dui_Options.spinBox_timeout_unsaved_time->setValue(tcp_timeout_time_ms_default);
+    dui_Options.spinBox_Video_res_h->setValue(webcam_res_h_default);
+    dui_Options.spinBox_Video_res_v->setValue(webcam_res_v_default);
+    dui_Options.spinBox_Video_framerate->setValue(webcam_framerate_default);
+
+    dui_Options.radioButton_webcam_pi->setChecked(false);
+    dui_Options.radioButton_webcam_android->setChecked(true);
+
 
     qDebug() << "Settings reseted !";
 }
@@ -483,10 +496,14 @@ void MainWindow::initSettings()
     dui_Options.spinBox_Video_res_v->setValue(settings.value("spinBox_Video_res_v",webcam_res_v_default).toInt());
     dui_Options.spinBox_Video_framerate->setValue(settings.value("spinBox_Video_framerate",webcam_framerate_default).toInt());
 
+    dui_Options.radioButton_webcam_pi->setChecked(settings.value("radioButton_webcam_pi").toBool());
+    dui_Options.radioButton_webcam_android->setChecked(settings.value("radioButton_webcam_android").toBool());
+
     dui_Options.comboBox_Server_IP_Distant->setCurrentText(settings.value("comboBox_Server_IP_Distant").toString());
     dui_Options.comboBox_Server_IP_Local->setCurrentText(settings.value("comboBox_Server_IP_Local").toString());
 
     dui_Options.comboBox_Server_Port->setCurrentText(settings.value("comboBox_Server_Port").toString());
+
 
 }
 
@@ -502,6 +519,10 @@ void MainWindow::saveSettings()
     settings.setValue("spinBox_Video_res_h",dui_Options.spinBox_Video_res_h->value());
     settings.setValue("spinBox_Video_res_v",dui_Options.spinBox_Video_res_v->value());
     settings.setValue("spinBox_Video_framerate",dui_Options.spinBox_Video_framerate->value());
+    settings.setValue("radioButton_webcam_pi",dui_Options.radioButton_webcam_pi->isChecked());
+    settings.setValue("radioButton_webcam_android",dui_Options.radioButton_webcam_android->isChecked());
+
+
 
     settings.setValue("comboBox_Server_IP_Distant",dui_Options.comboBox_Server_IP_Distant->currentText());
     settings.setValue("comboBox_Server_IP_Local",dui_Options.comboBox_Server_IP_Local->currentText());
@@ -522,4 +543,9 @@ void MainWindow::saveSettings()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     MainWindow::saveSettings();
+}
+
+void MainWindow::on_pushButton_reset_settings_clicked()
+{
+    MainWindow::resetSettings();
 }

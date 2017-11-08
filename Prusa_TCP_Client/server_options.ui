@@ -251,7 +251,7 @@
     <bool>true</bool>
    </property>
    <property name="currentText">
-    <string>prusabadie.ddns.net</string>
+    <string>your IP here</string>
    </property>
   </widget>
   <widget class="QLabel" name="Server_IP_PORT_separator">
@@ -280,7 +280,7 @@
     <bool>true</bool>
    </property>
    <property name="currentText">
-    <string>prusabadie.ddns.net</string>
+    <string>your IP here</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_timeout_3">

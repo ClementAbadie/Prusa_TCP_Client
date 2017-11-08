@@ -85,6 +85,8 @@ private slots:
 
     void on_Web_WebCam_Stop_clicked();
 
+    void on_pushButton_reset_settings_clicked();
+
 private:
 
 
