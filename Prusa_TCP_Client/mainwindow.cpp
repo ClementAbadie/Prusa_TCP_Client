@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tcp_timer, SIGNAL(timeout()), this, SLOT(tcp_timeout()));
     connect(tmp_timer, SIGNAL(timeout()), this, SLOT(tmp_timeout()));
 
-//    dui_Options.comboBox_Server_IP_Distant->addItem("prusabadie.ddns.net");
+    //    dui_Options.comboBox_Server_IP_Distant->addItem("prusabadie.ddns.net");
 
     dui_Options.comboBox_Server_IP_Local->addItem("192.168.0.5");
     dui_Options.comboBox_Server_IP_Local->addItem("192.168.0.150");
@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dui_Options.comboBox_Server_Port->addItem("51717");
     dui_Options.comboBox_Server_Port->addItem("56250");
-   dui_Options.comboBox_Server_Port->addItem("35136");
+    dui_Options.comboBox_Server_Port->addItem("35136");
 
 
     MainWindow::initSettings();
@@ -173,7 +173,7 @@ bool MainWindow::Connect_to_Server()
 {
     //mainWindows->Server_MSG->setText("");
     mainWindows->statusBar->showMessage("");
-//    qDebug() << "TcpSocket server :" << server_ip << ":" << server_port;
+    //    qDebug() << "TcpSocket server :" << server_ip << ":" << server_port;
     if(!m_TcpSocket_connected)
     {
         QString server_ip = dui_Options.comboBox_Server_IP_Distant->currentText();
@@ -212,8 +212,8 @@ void MainWindow::onConnected_distant()
         qDebug() << "TcpSocket_distant connected";
 
 
-        m_TcpSocket = m_TcpSocket_distant;
-        MainWindow::onConnected();
+    m_TcpSocket = m_TcpSocket_distant;
+    MainWindow::onConnected();
 }
 
 void MainWindow::onConnected_local()
@@ -224,8 +224,8 @@ void MainWindow::onConnected_local()
     if (m_debug)
         qDebug() << "TcpSocket_local connected";
 
-        m_TcpSocket = m_TcpSocket_local;
-        MainWindow::onConnected();
+    m_TcpSocket = m_TcpSocket_local;
+    MainWindow::onConnected();
 }
 
 //! [onConnected]
@@ -256,20 +256,20 @@ void MainWindow::onConnected()
 void MainWindow::onDisconnected_distant()
 {
 
-        m_TcpSocket_connected_distant = false;
-        if (m_debug)
-            qDebug() << "TcpSocket_distant Disconnected";
-        if(!m_TcpSocket_connected_local)MainWindow::onDisconnected();
+    m_TcpSocket_connected_distant = false;
+    if (m_debug)
+        qDebug() << "TcpSocket_distant Disconnected";
+    if(!m_TcpSocket_connected_local)MainWindow::onDisconnected();
 
 }
 
 void MainWindow::onDisconnected_local()
 {
 
-        m_TcpSocket_connected_local = false;
-        if (m_debug)
-            qDebug() << "TcpSocket_distant Disconnected";
-        if(!m_TcpSocket_connected_distant)MainWindow::onDisconnected();
+    m_TcpSocket_connected_local = false;
+    if (m_debug)
+        qDebug() << "TcpSocket_distant Disconnected";
+    if(!m_TcpSocket_connected_distant)MainWindow::onDisconnected();
 
 }
 
@@ -407,15 +407,15 @@ void MainWindow::web_Open_WebCam_View()
     QString server_ip;
     QString web_server_url;
 
+    if(m_TcpSocket_connected_distant) server_ip = dui_Options.comboBox_Server_IP_Distant->currentText();
+    else server_ip = dui_Options.comboBox_Server_IP_Local->currentText();
+
     if(dui_Options.radioButton_webcam_android->isChecked()){
-        server_ip = "prusabadie.ddns.net";
-        web_server_url = "https://" + server_ip + ":" + WEB_WEBCAM_PORT + "/flash.html";
+
+        web_server_url = "https://" + server_ip + ":" + QString::number(WEB_WEBCAM_PORT)+ "/flash.html";
     }
     else{
-        if(m_TcpSocket_connected_distant) server_ip = dui_Options.comboBox_Server_IP_Distant->currentText();
-        if(m_TcpSocket_connected_local) server_ip = dui_Options.comboBox_Server_IP_Local->currentText();
-
-        web_server_url = "http://" + server_ip + ":" + WEB_WEBCAM_PORT + "/stream";
+        web_server_url = "http://" + server_ip + ":" + QString::number(WEB_WEBCAM_PORT) + "/stream";
     }
 
     if (m_debug)
