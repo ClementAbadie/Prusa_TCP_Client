@@ -214,8 +214,8 @@ void MainWindow::onConnected_distant()
     if (m_debug)
         qDebug() << "TcpSocket_distant connected";
 
-//    mainWindows->statusBar->showMessage("Connected ! (Distant)");
-        mainWindows->PushButton_Connect_to_Server->setText("Disconnect (Distant)");
+    //    mainWindows->statusBar->showMessage("Connected ! (Distant)");
+    mainWindows->PushButton_Connect_to_Server->setText("Disconnect (Distant)");
     m_TcpSocket = m_TcpSocket_distant;
     MainWindow::onConnected();
 }
@@ -227,8 +227,8 @@ void MainWindow::onConnected_local()
 
     if (m_debug)
         qDebug() << "TcpSocket_local connected";
-//    mainWindows->statusBar->showMessage("Connected ! (Local)");
-        mainWindows->PushButton_Connect_to_Server->setText("Disconnect (Local)");
+    //    mainWindows->statusBar->showMessage("Connected ! (Local)");
+    mainWindows->PushButton_Connect_to_Server->setText("Disconnect (Local)");
     m_TcpSocket = m_TcpSocket_local;
     MainWindow::onConnected();
 }
@@ -237,7 +237,7 @@ void MainWindow::onConnected_local()
 void MainWindow::onConnected()
 {
     tcp_timer->stop();
-//    mainWindows->PushButton_Connect_to_Server->setText("Disconnect");
+    //    mainWindows->PushButton_Connect_to_Server->setText("Disconnect");
     m_TcpSocket_connected = true;
 
 
@@ -443,7 +443,7 @@ void MainWindow::on_Server_Rep_Host_clicked()
 {
     //TODO : Clean code :
 
-    QDir repetier_dir_full("C:/Program Files/Repetier-Host");
+    repetier_dir_full.setPath(dui_Options.lineEdit_repetier_path->text());
     QString file = repetier_dir_full.absolutePath() + "/RepetierHost.exe";
 
     QProcess *process = new QProcess(this);
@@ -455,6 +455,45 @@ void MainWindow::on_Server_Rep_Host_clicked()
 }
 
 
+void MainWindow::on_Server_CAO_clicked()
+{
+
+    cao_dir_full.setPath(dui_Options.lineEdit_CAO_path->text());
+    QString file = cao_dir_full.absolutePath();
+
+    QProcess *process = new QProcess(this);
+
+    if (m_debug)
+        qDebug() << "cao path" << file;
+
+    process->startDetached(file, QStringList() << "");
+}
+
+void MainWindow::on_Server_thingiverse_clicked()
+{
+
+    QString web_server_url = "https://www.thingiverse.com/";
+
+    if (m_debug)
+        qDebug() << "web_server_url" << web_server_url;
+
+    QDesktopServices::openUrl(QUrl(web_server_url, QUrl::TolerantMode));
+}
+
+void MainWindow::on_Server_projects_clicked()
+{
+    project_dir_full.setPath(dui_Options.lineEdit_project_path->text());
+    QString file = "file:" + project_dir_full.absolutePath();
+
+    QProcess *process = new QProcess(this);
+
+    if (m_debug)
+        qDebug() << "project path" << file;
+
+    //process->startDetached(file, QStringList() << "");
+        QDesktopServices::openUrl(QUrl(file, QUrl::TolerantMode));
+}
+
 void MainWindow::resetSettings()
 {
 
@@ -462,13 +501,13 @@ void MainWindow::resetSettings()
 
     QSettings settings(settings_file_name, QSettings::IniFormat);
 
-//    settings.setValue("client_tcp_timeout_time_ms", tcp_timeout_time_ms_default);
-//    settings.setValue("client_tmp_timeout_time_ms", tmp_timeout_time_ms_default);
-//    settings.setValue("spinBox_Video_res_h",webcam_res_h_default);
-//    settings.setValue("spinBox_Video_res_v",webcam_res_v_default);
-//    settings.setValue("spinBox_Video_framerate",webcam_framerate_default);
-//    settings.setValue("WEB_SERVER_PORT",WEB_SERVER_PORT);
-//    settings.setValue("WEB_WEBCAM_PORT",WEB_WEBCAM_PORT);
+    //    settings.setValue("client_tcp_timeout_time_ms", tcp_timeout_time_ms_default);
+    //    settings.setValue("client_tmp_timeout_time_ms", tmp_timeout_time_ms_default);
+    //    settings.setValue("spinBox_Video_res_h",webcam_res_h_default);
+    //    settings.setValue("spinBox_Video_res_v",webcam_res_v_default);
+    //    settings.setValue("spinBox_Video_framerate",webcam_framerate_default);
+    //    settings.setValue("WEB_SERVER_PORT",WEB_SERVER_PORT);
+    //    settings.setValue("WEB_WEBCAM_PORT",WEB_WEBCAM_PORT);
 
 
     dui_Options.spinBox_timeout_unsaved_time->setValue(tcp_timeout_time_ms_default);
@@ -508,7 +547,11 @@ void MainWindow::initSettings()
 
     dui_Options.comboBox_Server_Port->setCurrentText(settings.value("comboBox_Server_Port").toString());
 
-
+    settings.beginGroup("path");
+    dui_Options.lineEdit_repetier_path->setText(settings.value("repetier_dir_full").toString());
+    dui_Options.lineEdit_CAO_path->setText(settings.value("cao_dir_full").toString());
+    dui_Options.lineEdit_project_path->setText(settings.value("project_dir_full").toString());
+    settings.endGroup();
 }
 
 void MainWindow::saveSettings()
@@ -536,6 +579,16 @@ void MainWindow::saveSettings()
     settings.setValue("comboBox_Server_IP_Distant_index",dui_Options.comboBox_Server_IP_Distant->currentIndex());
     settings.setValue("comboBox_Server_IP_Local_index",dui_Options.comboBox_Server_IP_Local->currentIndex());
     settings.setValue("comboBox_Server_Port_index",dui_Options.comboBox_Server_Port->currentIndex());
+
+
+
+    settings.beginGroup("path");
+    settings.setValue("repetier_dir_full",dui_Options.lineEdit_repetier_path->text());
+    settings.setValue("cao_dir_full",dui_Options.lineEdit_CAO_path->text());
+    settings.setValue("project_dir_full",dui_Options.lineEdit_project_path->text());
+    settings.endGroup();
+
+
     //    settings.setValue("WEB_SERVER_PORT",WEB_SERVER_PORT);
     //    settings.setValue("WEB_WEBCAM_PORT",WEB_WEBCAM_PORT);
 
@@ -554,3 +607,5 @@ void MainWindow::on_pushButton_reset_settings_clicked()
 {
     MainWindow::resetSettings();
 }
+
+

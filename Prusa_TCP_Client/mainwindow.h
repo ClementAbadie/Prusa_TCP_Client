@@ -44,6 +44,10 @@ public:
     int WEB_SERVER_PORT = 3344;
     int WEB_WEBCAM_PORT = 9090;
 
+     QDir repetier_dir_full;
+     QDir cao_dir_full;
+     QDir project_dir_full;
+
 
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -86,6 +90,12 @@ private slots:
     void on_Web_WebCam_Stop_clicked();
 
     void on_pushButton_reset_settings_clicked();
+
+    void on_Server_CAO_clicked();
+
+    void on_Server_thingiverse_clicked();
+
+    void on_Server_projects_clicked();
 
 private:
 
