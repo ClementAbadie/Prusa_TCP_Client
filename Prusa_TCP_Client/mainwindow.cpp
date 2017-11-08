@@ -10,28 +10,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dui_Options.setupUi(&dialog_Options);
 
-    connect(&m_TcpSocket, &QTcpSocket::connected,       this, &MainWindow::onConnected);
-    connect(&m_TcpSocket, &QTcpSocket::disconnected,    this, &MainWindow::onDisconnected);
-    connect(&m_TcpSocket, &QTcpSocket::readyRead,       this, &MainWindow::readyRead);
+    connect(m_TcpSocket, &QTcpSocket::connected,       this, &MainWindow::onConnected);
+    connect(m_TcpSocket, &QTcpSocket::disconnected,    this, &MainWindow::onDisconnected);
+    connect(m_TcpSocket, &QTcpSocket::readyRead,       this, &MainWindow::readyRead);
+
+    connect(m_TcpSocket_distant, &QTcpSocket::connected,       this, &MainWindow::onConnected_distant);
+    connect(m_TcpSocket_distant, &QTcpSocket::disconnected,    this, &MainWindow::onDisconnected_distant);
+    connect(m_TcpSocket_distant, &QTcpSocket::readyRead,       this, &MainWindow::readyRead);
+
+    connect(m_TcpSocket_local, &QTcpSocket::connected,       this, &MainWindow::onConnected_local);
+    connect(m_TcpSocket_local, &QTcpSocket::disconnected,    this, &MainWindow::onDisconnected_local);
+    connect(m_TcpSocket_local, &QTcpSocket::readyRead,       this, &MainWindow::readyRead);
 
     connect(tcp_timer, SIGNAL(timeout()), this, SLOT(tcp_timeout()));
+    connect(tmp_timer, SIGNAL(timeout()), this, SLOT(tmp_timeout()));
 
+//    dui_Options.comboBox_Server_IP_Distant->addItem("prusabadie.ddns.net");
 
-
-    dui_Options.comboBox_Server_IP->addItem("192.168.0.5");
-    dui_Options.comboBox_Server_IP->addItem("prusabadie.ddns.net");
-    dui_Options.comboBox_Server_IP->addItem("192.168.0.150");
-    dui_Options.comboBox_Server_IP->addItem("192.168.0.190");
-    dui_Options.comboBox_Server_IP->addItem("192.168.0.25");
+    dui_Options.comboBox_Server_IP_Local->addItem("192.168.0.5");
+    dui_Options.comboBox_Server_IP_Local->addItem("192.168.0.150");
+    dui_Options.comboBox_Server_IP_Local->addItem("192.168.0.190");
+    dui_Options.comboBox_Server_IP_Local->addItem("192.168.0.25");
 
 
     dui_Options.comboBox_Server_Port->addItem("51717");
     dui_Options.comboBox_Server_Port->addItem("56250");
-    dui_Options.comboBox_Server_Port->addItem("35136");
+   dui_Options.comboBox_Server_Port->addItem("35136");
+
 
     MainWindow::initSettings();
 
-    Connect_to_Server();
+    Connect_to_Servers();
 
 
 
@@ -71,18 +80,6 @@ void MainWindow::on_actionOptions_triggered()
 
     // some more stuff to setup dialog
 
-    //    dui_Options.spinBox_timeout_unsaved_time->setValue(tcp_timeout_time_ms);
-    //dui_Options.spinBox_Video_res_h->setValue(webcam_res_h);
-    //dui_Options.spinBox_Video_res_v->setValue(webcam_res_v);
-    //dui_Options.spinBox_Video_framerate->setValue(webcam_framerate);
-
-
-    //    qDebug() << settings.contains("client_tcp_timeout_time_ms");
-
-    //    dui_Options.spinBox_timeout_unsaved_time->setValue(settings.value("client_tcp_timeout_time_ms",tcp_timeout_time_ms_default).toInt());
-
-    //    qDebug() << settings.contains("client_tcp_timeout_time_ms");
-
     dialog_Options.show();
 
     if (dialog_Options.exec() == QDialog::Accepted)
@@ -91,17 +88,6 @@ void MainWindow::on_actionOptions_triggered()
 
     }
 
-    //tcp_timeout_time_ms = dui_Options.spinBox_timeout_unsaved_time->value();
-    //webcam_res_h = dui_Options.spinBox_Video_res_h->value();
-    //webcam_res_v = dui_Options.spinBox_Video_res_v->value();
-    //webcam_framerate = dui_Options.spinBox_Video_framerate->value();
-
-    //    settings.setValue("client_tcp_timeout_time_ms", dui_Options.spinBox_timeout_unsaved_time->value());
-    //settings.setValue("webcam/webcam_res_v", dui_Options.spinBox_Video_res_h->value());
-    //settings.setValue("webcam/webcam_res_h", dui_Options.spinBox_Video_res_v->value());
-    //settings.setValue("webcam/webcam_framerate", dui_Options.spinBox_Video_framerate->value());
-
-    //   qDebug() << settings.contains("client_tcp_timeout_time_ms");
     qDebug() << "END";
 }
 
@@ -110,9 +96,18 @@ void MainWindow::tcp_timeout(){
 
     //mainWindows->Server_MSG->setText("Server not found !");
     mainWindows->statusBar->showMessage("Server not found !",STATUS_BAR_MSG_TIMEOUT);
-    m_TcpSocket.disconnectFromHost();
-    m_TcpSocket.close();
-    m_TcpSocket.abort();
+
+    if(!m_TcpSocket_connected_distant){
+        m_TcpSocket_distant->disconnectFromHost();
+        m_TcpSocket_distant->close();
+        m_TcpSocket_distant->abort();
+    }
+    if(!m_TcpSocket_connected_local){
+        m_TcpSocket_local->disconnectFromHost();
+        m_TcpSocket_local->close();
+        m_TcpSocket_local->abort();
+    }
+
     tcp_timer->stop();
 
 }
@@ -127,16 +122,61 @@ void MainWindow::tmp_timeout(){
 
 void MainWindow::on_PushButton_Connect_to_Server_clicked()
 {
-    Connect_to_Server();
+    Connect_to_Servers();
+}
+
+
+
+bool MainWindow::Connect_to_Servers()
+{
+    //mainWindows->Server_MSG->setText("");
+    mainWindows->statusBar->showMessage("");
+
+
+    if(!m_TcpSocket_connected){
+        int server_port = dui_Options.comboBox_Server_Port->currentText().toInt();
+        QString server_ip_distant = dui_Options.comboBox_Server_IP_Distant->currentText();
+        QString server_ip_local = dui_Options.comboBox_Server_IP_Local->currentText();
+        {
+            if (m_debug)
+                qDebug() << "TcpSocket server distant :" << server_ip_distant << ":" << server_port;
+            qDebug() << "TcpSocket server local :" << server_ip_local << ":" << server_port;
+
+            //mainWindows->Server_MSG->setText("Connection...");
+            mainWindows->statusBar->showMessage("Connection...");
+            m_TcpSocket_distant->connectToHost(server_ip_distant,server_port);
+            m_TcpSocket_local->connectToHost(server_ip_local,server_port);
+            tcp_timer->start(dui_Options.spinBox_timeout_unsaved_time->value());
+        }
+
+        return true;
+
+    }
+    else
+    {
+        m_TcpSocket->write("exit");
+        m_TcpSocket->close();
+
+        m_TcpSocket_distant->disconnectFromHost();
+        m_TcpSocket_distant->close();
+        m_TcpSocket_distant->abort();
+
+        m_TcpSocket_local->disconnectFromHost();
+        m_TcpSocket_local->close();
+        m_TcpSocket_local->abort();
+        return false;
+    }
+
 }
 
 bool MainWindow::Connect_to_Server()
 {
     //mainWindows->Server_MSG->setText("");
     mainWindows->statusBar->showMessage("");
+//    qDebug() << "TcpSocket server :" << server_ip << ":" << server_port;
     if(!m_TcpSocket_connected)
     {
-        QString server_ip = dui_Options.comboBox_Server_IP->currentText();
+        QString server_ip = dui_Options.comboBox_Server_IP_Distant->currentText();
         int server_port = dui_Options.comboBox_Server_Port->currentText().toInt();
 
         {
@@ -145,7 +185,7 @@ bool MainWindow::Connect_to_Server()
 
             //mainWindows->Server_MSG->setText("Connection...");
             mainWindows->statusBar->showMessage("Connection...");
-            m_TcpSocket.connectToHost(server_ip,server_port);
+            m_TcpSocket->connectToHost(server_ip,server_port);
 
             tcp_timer->start(dui_Options.spinBox_timeout_unsaved_time->value());
 
@@ -155,28 +195,50 @@ bool MainWindow::Connect_to_Server()
     }
     else
     {
-        m_TcpSocket.write("exit");
-        m_TcpSocket.close();
+        qDebug() << "TcpSocket close.";
+        m_TcpSocket->write("exit");
+        m_TcpSocket->close();
         return false;
     }
 
 }
 
+void MainWindow::onConnected_distant()
+{
+    m_TcpSocket_connected_distant = true;
+    tcp_timer->stop();
+
+    if (m_debug)
+        qDebug() << "TcpSocket_distant connected";
+
+
+        m_TcpSocket = m_TcpSocket_distant;
+        MainWindow::onConnected();
+}
+
+void MainWindow::onConnected_local()
+{
+    m_TcpSocket_connected_local = true;
+    tcp_timer->stop();
+
+    if (m_debug)
+        qDebug() << "TcpSocket_local connected";
+
+        m_TcpSocket = m_TcpSocket_local;
+        MainWindow::onConnected();
+}
 
 //! [onConnected]
 void MainWindow::onConnected()
 {
     tcp_timer->stop();
     mainWindows->PushButton_Connect_to_Server->setText("Disconnect");
-    //    mainWindows->statusBar->showMessage("Disconnect");
+    mainWindows->statusBar->showMessage("Connected !");
     m_TcpSocket_connected = true;
 
-    if (m_debug)
-        qDebug() << "TcpSocket connected";
 
     //TEMPERATURE TIMER
-
-    connect(tmp_timer, SIGNAL(timeout()), this, SLOT(tmp_timeout()));
+    request_to_server_temperature();
     tmp_timer->start();
 
     //ENABLE BUTTONS
@@ -191,15 +253,32 @@ void MainWindow::onConnected()
 //! [onConnected]
 
 
+void MainWindow::onDisconnected_distant()
+{
+
+        m_TcpSocket_connected_distant = false;
+        if (m_debug)
+            qDebug() << "TcpSocket_distant Disconnected";
+        if(!m_TcpSocket_connected_local)MainWindow::onDisconnected();
+
+}
+
+void MainWindow::onDisconnected_local()
+{
+
+        m_TcpSocket_connected_local = false;
+        if (m_debug)
+            qDebug() << "TcpSocket_distant Disconnected";
+        if(!m_TcpSocket_connected_distant)MainWindow::onDisconnected();
+
+}
+
 //! [onDisconnected]
 void MainWindow::onDisconnected()
 {
     mainWindows->PushButton_Connect_to_Server->setText("Connection");
     //mainWindows->statusBar->showMessage("Connection");
     m_TcpSocket_connected = false;
-
-    if (m_debug)
-        qDebug() << "TcpSocket Disconnected";
 
     //TEMPERATURE TIMER
 
@@ -215,6 +294,7 @@ void MainWindow::onDisconnected()
     mainWindows->Web_WebCam_Stop->setEnabled(false);
     //mainWindows->Server_MSG->setText("");
     mainWindows->statusBar->showMessage("");
+    mainWindows->Server_tmp->setText("");
 }
 //! [onDisconnected]
 
@@ -231,10 +311,12 @@ void MainWindow::onTextMessageReceived(QString message)
 
 void MainWindow::readyRead()
 {
+    if (m_debug)
+        qDebug() << "Ready read !";
 
     //mainWindows->Server_MSG->setText(m_TcpSocket.readAll());
 
-    QString server_msg = tr(m_TcpSocket.readAll());
+    QString server_msg = tr(m_TcpSocket->readAll());
 
 
     if(server_msg.startsWith("M100:"))
@@ -247,35 +329,32 @@ void MainWindow::readyRead()
     {
         mainWindows->statusBar->showMessage(server_msg);
     }
-
-
-
 }
 
 void MainWindow::on_Prusa_ON_clicked()
 {
-    m_TcpSocket.write("M1");
+    m_TcpSocket->write("M1");
 }
 
 void MainWindow::on_Prusa_OFF_clicked()
 {
-    m_TcpSocket.write("M2");
+    m_TcpSocket->write("M2");
 }
 
 void MainWindow::on_Server_Stop_clicked()
 {
-    m_TcpSocket.write("M9");
+    m_TcpSocket->write("M9");
 }
 
 
 void MainWindow::on_Server_ReStart_clicked()
 {
-    m_TcpSocket.write("M10");
+    m_TcpSocket->write("M10");
 }
 
 void MainWindow::request_to_server_temperature()
 {
-    m_TcpSocket.write("M100");
+    m_TcpSocket->write("M100");
 }
 
 
@@ -288,7 +367,7 @@ void MainWindow::on_Web_WebCam_Stop_clicked()
     }
     else{
 
-        m_TcpSocket.write("M200");
+        m_TcpSocket->write("M200");
     }
 
 }
@@ -301,7 +380,7 @@ void MainWindow::on_Web_WebCam_Restart_clicked()
     }
     else{
         QString command = "M201:" + QString::number(dui_Options.spinBox_Video_res_h->value()) + ":" + QString::number(dui_Options.spinBox_Video_res_v->value()) + ":" + QString::number(dui_Options.spinBox_Video_framerate->value());
-        m_TcpSocket.write(command.toStdString().c_str());
+        m_TcpSocket->write(command.toStdString().c_str());
 
         qDebug() << "command.toStdString().c_str() : " << command.toStdString().c_str();
     }
@@ -311,7 +390,9 @@ void MainWindow::on_Web_WebCam_Restart_clicked()
 
 void MainWindow::web_Open_Server_View()
 {
-    QString server_ip = dui_Options.comboBox_Server_IP->currentText();
+    QString server_ip;
+    if(m_TcpSocket_connected_distant) server_ip = dui_Options.comboBox_Server_IP_Distant->currentText();
+    if(m_TcpSocket_connected_local) server_ip = dui_Options.comboBox_Server_IP_Local->currentText();
     QString web_server_url = "http://" + server_ip + ":" + WEB_SERVER_PORT;
 
     if (m_debug)
@@ -331,8 +412,9 @@ void MainWindow::web_Open_WebCam_View()
         web_server_url = "https://" + server_ip + ":" + WEB_WEBCAM_PORT + "/flash.html";
     }
     else{
+        if(m_TcpSocket_connected_distant) server_ip = dui_Options.comboBox_Server_IP_Distant->currentText();
+        if(m_TcpSocket_connected_local) server_ip = dui_Options.comboBox_Server_IP_Local->currentText();
 
-        server_ip = dui_Options.comboBox_Server_IP->currentText();
         web_server_url = "http://" + server_ip + ":" + WEB_WEBCAM_PORT + "/stream";
     }
 
@@ -401,12 +483,10 @@ void MainWindow::initSettings()
     dui_Options.spinBox_Video_res_v->setValue(settings.value("spinBox_Video_res_v",webcam_res_v_default).toInt());
     dui_Options.spinBox_Video_framerate->setValue(settings.value("spinBox_Video_framerate",webcam_framerate_default).toInt());
 
-    dui_Options.comboBox_Server_IP->setCurrentText(settings.value("comboBox_Server_IP").toString());
+    dui_Options.comboBox_Server_IP_Distant->setCurrentText(settings.value("comboBox_Server_IP_Distant").toString());
+    dui_Options.comboBox_Server_IP_Local->setCurrentText(settings.value("comboBox_Server_IP_Local").toString());
+
     dui_Options.comboBox_Server_Port->setCurrentText(settings.value("comboBox_Server_Port").toString());
-
-
-//    dui_Options.comboBox_Server_IP->setCurrentIndex(settings.value("comboBox_Server_IP_index").toInt());
-//    dui_Options.comboBox_Server_Port->setCurrentIndex(settings.value("comboBox_Server_Port_index").toInt());
 
 }
 
@@ -423,10 +503,12 @@ void MainWindow::saveSettings()
     settings.setValue("spinBox_Video_res_v",dui_Options.spinBox_Video_res_v->value());
     settings.setValue("spinBox_Video_framerate",dui_Options.spinBox_Video_framerate->value());
 
-    settings.setValue("comboBox_Server_IP",dui_Options.comboBox_Server_IP->currentText());
+    settings.setValue("comboBox_Server_IP_Distant",dui_Options.comboBox_Server_IP_Distant->currentText());
+    settings.setValue("comboBox_Server_IP_Local",dui_Options.comboBox_Server_IP_Local->currentText());
     settings.setValue("comboBox_Server_Port",dui_Options.comboBox_Server_Port->currentText());
 
-    settings.setValue("comboBox_Server_IP_index",dui_Options.comboBox_Server_IP->currentIndex());
+    settings.setValue("comboBox_Server_IP_Distant_index",dui_Options.comboBox_Server_IP_Distant->currentIndex());
+    settings.setValue("comboBox_Server_IP_Local_index",dui_Options.comboBox_Server_IP_Local->currentIndex());
     settings.setValue("comboBox_Server_Port_index",dui_Options.comboBox_Server_Port->currentIndex());
     //    settings.setValue("WEB_SERVER_PORT",WEB_SERVER_PORT);
     //    settings.setValue("WEB_WEBCAM_PORT",WEB_WEBCAM_PORT);

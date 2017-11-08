@@ -11,14 +11,14 @@
 #include <QProcess>
 #include <QDir>
 #include <QCoreApplication>
-
+#include <QSettings>
 
 #include "ui_mainwindow.h"
 #include "ui_authorinfos.h"
 #include "ui_server_options.h"
-#include "setting.h"
+//#include "setting.h"
 
-#define _VERSION_ "1.6"
+#define _VERSION_ "1.7"
 
 
 
@@ -59,6 +59,12 @@ private slots:
     void tcp_timeout();
     void tmp_timeout();
 
+    void onConnected_distant();
+    void onDisconnected_distant();
+
+    void onConnected_local();
+    void onDisconnected_local();
+
     void on_Prusa_ON_clicked();
     void on_Prusa_OFF_clicked();
     void on_Server_Stop_clicked();
@@ -91,9 +97,16 @@ private:
 
     QString m_sSettingsFile;
 
-    QTcpSocket m_TcpSocket;
-    bool m_TcpSocket_connected = false;
     bool m_debug = true;
+
+    QTcpSocket *m_TcpSocket = new QTcpSocket();
+    bool m_TcpSocket_connected = false;
+
+    QTcpSocket *m_TcpSocket_distant = new QTcpSocket();
+    bool m_TcpSocket_connected_distant = false;
+
+    QTcpSocket *m_TcpSocket_local = new QTcpSocket();
+    bool m_TcpSocket_connected_local = false;
 
     QTimer *tcp_timer = new QTimer(this);
     int tcp_timeout_time_ms_default = 1000;
@@ -106,7 +119,7 @@ private:
     int webcam_framerate_default = 20;
 
     bool Connect_to_Server();
-
+    bool Connect_to_Servers();
 
     void initSettings();
     void resetSettings();
