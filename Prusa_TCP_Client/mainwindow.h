@@ -18,7 +18,7 @@
 #include "ui_server_options.h"
 //#include "setting.h"
 
-#define _VERSION_ "1.7"
+#define _VERSION_ "1.8"
 
 
 

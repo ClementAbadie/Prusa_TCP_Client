@@ -44,6 +44,9 @@ public:
     QLabel *server_label_2;
     QPushButton *Web_WebCam_Restart;
     QPushButton *Web_WebCam_Stop;
+    QPushButton *Server_CAO;
+    QPushButton *Server_projects;
+    QPushButton *Server_thingiverse;
     QMenuBar *menuBar;
     QMenu *Options;
     QMenu *menuAide;
@@ -103,7 +106,7 @@ public:
         Server_Rep_Host = new QPushButton(centralWidget);
         Server_Rep_Host->setObjectName(QStringLiteral("Server_Rep_Host"));
         Server_Rep_Host->setEnabled(true);
-        Server_Rep_Host->setGeometry(QRect(80, 170, 171, 31));
+        Server_Rep_Host->setGeometry(QRect(10, 170, 91, 31));
         Web_WebCam_View = new QPushButton(centralWidget);
         Web_WebCam_View->setObjectName(QStringLiteral("Web_WebCam_View"));
         Web_WebCam_View->setEnabled(true);
@@ -120,6 +123,18 @@ public:
         Web_WebCam_Stop->setObjectName(QStringLiteral("Web_WebCam_Stop"));
         Web_WebCam_Stop->setEnabled(false);
         Web_WebCam_Stop->setGeometry(QRect(210, 130, 41, 31));
+        Server_CAO = new QPushButton(centralWidget);
+        Server_CAO->setObjectName(QStringLiteral("Server_CAO"));
+        Server_CAO->setEnabled(true);
+        Server_CAO->setGeometry(QRect(110, 170, 41, 31));
+        Server_projects = new QPushButton(centralWidget);
+        Server_projects->setObjectName(QStringLiteral("Server_projects"));
+        Server_projects->setEnabled(true);
+        Server_projects->setGeometry(QRect(160, 170, 61, 31));
+        Server_thingiverse = new QPushButton(centralWidget);
+        Server_thingiverse->setObjectName(QStringLiteral("Server_thingiverse"));
+        Server_thingiverse->setEnabled(true);
+        Server_thingiverse->setGeometry(QRect(230, 170, 71, 31));
         MainWindow->setCentralWidget(centralWidget);
         PushButton_Connect_to_Server->raise();
         server_label->raise();
@@ -135,6 +150,9 @@ public:
         Web_WebCam_Restart->raise();
         Web_WebCam_Stop->raise();
         Server_tmp->raise();
+        Server_CAO->raise();
+        Server_projects->raise();
+        Server_thingiverse->raise();
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 314, 20));
@@ -177,12 +195,15 @@ public:
         Prusa_ON->setText(QApplication::translate("MainWindow", "Turn ON", Q_NULLPTR));
         Server_tmp->setText(QString());
         Server_ReStart->setText(QApplication::translate("MainWindow", "REBOOT", Q_NULLPTR));
-        Server_Web_Open->setText(QApplication::translate("MainWindow", "Open", Q_NULLPTR));
-        Server_Rep_Host->setText(QApplication::translate("MainWindow", "Open Repetier Host", Q_NULLPTR));
+        Server_Web_Open->setText(QApplication::translate("MainWindow", "Web", Q_NULLPTR));
+        Server_Rep_Host->setText(QApplication::translate("MainWindow", "Repetier Host", Q_NULLPTR));
         Web_WebCam_View->setText(QApplication::translate("MainWindow", "Open", Q_NULLPTR));
         server_label_2->setText(QApplication::translate("MainWindow", "WebCam :", Q_NULLPTR));
         Web_WebCam_Restart->setText(QApplication::translate("MainWindow", "(Re)Start", Q_NULLPTR));
         Web_WebCam_Stop->setText(QApplication::translate("MainWindow", "Stop", Q_NULLPTR));
+        Server_CAO->setText(QApplication::translate("MainWindow", "CAO", Q_NULLPTR));
+        Server_projects->setText(QApplication::translate("MainWindow", "Projects", Q_NULLPTR));
+        Server_thingiverse->setText(QApplication::translate("MainWindow", "Thingiverse", Q_NULLPTR));
         Options->setTitle(QApplication::translate("MainWindow", "Server", Q_NULLPTR));
         menuAide->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
     } // retranslateUi

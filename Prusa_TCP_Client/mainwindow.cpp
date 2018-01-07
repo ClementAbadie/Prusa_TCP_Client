@@ -409,23 +409,26 @@ void MainWindow::web_Open_WebCam_View()
 {
 
     QString server_ip;
-    QString web_server_url;
+    QString web_server_url_1;
+    QString web_server_url_2;
 
     if(m_TcpSocket_connected_distant) server_ip = dui_Options.comboBox_Server_IP_Distant->currentText();
-    else server_ip = dui_Options.comboBox_Server_IP_Local->currentText();
+    else server_ip = dui_Options.comboBox_Webcam_IP->currentText();
 
     if(dui_Options.radioButton_webcam_android->isChecked()){
-
-        web_server_url = "https://" + server_ip + ":" + QString::number(WEB_WEBCAM_PORT)+ "/flash.html";
+        web_server_url_1 = "https://" + server_ip + ":" + QString::number(WEB_WEBCAM_PORT);
+        web_server_url_2 = "https://" + server_ip + ":" + QString::number(WEB_WEBCAM_PORT)+ "/flash.html";
     }
     else{
-        web_server_url = "http://" + server_ip + ":" + QString::number(WEB_WEBCAM_PORT) + "/stream";
+        web_server_url_1 = "http://" + server_ip + ":" + QString::number(WEB_WEBCAM_PORT) + "/stream";
     }
 
     if (m_debug)
-        qDebug() << "web_server_url" << web_server_url;
+        qDebug() << "web_server_url_1 : " << web_server_url_1;
+        qDebug() << "web_server_url_2 : " << web_server_url_2;
 
-    QDesktopServices::openUrl(QUrl(web_server_url, QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl(web_server_url_1, QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl(web_server_url_2, QUrl::TolerantMode));
 }
 
 void MainWindow::on_Server_Web_Open_clicked()
@@ -485,8 +488,6 @@ void MainWindow::on_Server_projects_clicked()
     project_dir_full.setPath(dui_Options.lineEdit_project_path->text());
     QString file = "file:" + project_dir_full.absolutePath();
 
-    QProcess *process = new QProcess(this);
-
     if (m_debug)
         qDebug() << "project path" << file;
 
@@ -542,6 +543,7 @@ void MainWindow::initSettings()
     dui_Options.radioButton_webcam_pi->setChecked(settings.value("radioButton_webcam_pi").toBool());
     dui_Options.radioButton_webcam_android->setChecked(settings.value("radioButton_webcam_android").toBool());
 
+    dui_Options.comboBox_Webcam_IP->setCurrentText(settings.value("comboBox_Webcam_IP").toString());
     dui_Options.comboBox_Server_IP_Distant->setCurrentText(settings.value("comboBox_Server_IP_Distant").toString());
     dui_Options.comboBox_Server_IP_Local->setCurrentText(settings.value("comboBox_Server_IP_Local").toString());
 
@@ -572,6 +574,7 @@ void MainWindow::saveSettings()
 
 
 
+    settings.setValue("comboBox_Webcam_IP",dui_Options.comboBox_Webcam_IP->currentText());
     settings.setValue("comboBox_Server_IP_Distant",dui_Options.comboBox_Server_IP_Distant->currentText());
     settings.setValue("comboBox_Server_IP_Local",dui_Options.comboBox_Server_IP_Local->currentText());
     settings.setValue("comboBox_Server_Port",dui_Options.comboBox_Server_Port->currentText());
