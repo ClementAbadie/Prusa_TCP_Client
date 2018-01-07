@@ -20,9 +20,9 @@
 
 
 // Git and VERSION
-#define _VERSION_ "1.8"
+#define _VERSION_ "1.9"
 
-//Git Commit : Alt+g Alt+c Select Commit and Push (long click)
+//Git Commit : Alt+g Alt+c Select Commit and Push (long click !)
 // https://github.com/ClementAbadie/Prusa_TCP_Client
 
 #define STATUS_BAR_MSG_TIMEOUT 3000

@@ -17,13 +17,13 @@ CXXFLAGS      = -fno-keep-inline-dllexport -pipe -g -std=gnu++11 -Wextra -Wall -
 INCPATH       = -I..\Prusa_TCP_Client -I. -I..\..\..\Qt\5.9.1\mingw53_32\include -I..\..\..\Qt\5.9.1\mingw53_32\include\QtWidgets -I..\..\..\Qt\5.9.1\mingw53_32\include\QtGui -I..\..\..\Qt\5.9.1\mingw53_32\include\QtANGLE -I..\..\..\Qt\5.9.1\mingw53_32\include\QtNetwork -I..\..\..\Qt\5.9.1\mingw53_32\include\QtCore -Idebug -I. -I..\..\..\Qt\5.9.1\mingw53_32\mkspecs\win32-g++ 
 LINKER      =        g++
 LFLAGS        =        -Wl,-subsystem,windows -mthreads
-LIBS        =        -lmingw32 -LD:\Dev\Qt\5.9.1\mingw53_32\lib D:\Dev\Qt\5.9.1\mingw53_32\lib\libqtmaind.a -LC:\utils\my_sql\my_sql\lib -LC:\utils\postgresql\pgsql\lib -lshell32 D:\Dev\Qt\5.9.1\mingw53_32\lib\libQt5Widgetsd.a D:\Dev\Qt\5.9.1\mingw53_32\lib\libQt5Guid.a D:\Dev\Qt\5.9.1\mingw53_32\lib\libQt5Networkd.a D:\Dev\Qt\5.9.1\mingw53_32\lib\libQt5Cored.a 
+LIBS        =        -lmingw32 -LD:\Dev\Qt\5.9.1\mingw53_32\lib D:\Dev\Qt\5.9.1\mingw53_32\lib\libqtmaind.a -LC:\utils\my_sql\my_sql\lib -LC:\utils\postgresql\pgsql\lib -lshell32 D:\Dev\Qt\5.9.1\mingw53_32\lib\libQt5Widgetsd.a D:\Dev\Qt\5.9.1\mingw53_32\lib\libQt5Guid.a D:\Dev\Qt\5.9.1\mingw53_32\lib\libQt5Networkd.a D:\Dev\Qt\5.9.1\mingw53_32\lib\libQt5Cored.a debug\prusa_client_res.o 
 QMAKE         = D:\Dev\Qt\5.9.1\mingw53_32\bin\qmake.exe
 IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = debug\prusa_client_res.o
 COPY          = copy /y
 SED           = $(QMAKE) -install sed
 COPY_FILE     = copy /y
@@ -63,8 +63,11 @@ DESTDIR_TARGET = debug\RaspberryPi_3DPrinted_Client.exe
 first: all
 all: Makefile.Debug  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET): ui_mainwindow.h ui_authorinfos.h ui_server_options.h $(OBJECTS) 
+$(DESTDIR_TARGET): ui_mainwindow.h ui_authorinfos.h ui_server_options.h $(OBJECTS) debug/prusa_client_res.o
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) $(OBJECTS)  $(LIBS)
+
+debug/prusa_client_res.o: ../Prusa_TCP_Client/prusa_client.rc
+	windres -i ..\Prusa_TCP_Client\prusa_client.rc -o debug\prusa_client_res.o --include-dir=./../Prusa_TCP_Client $(DEFINES)
 
 qmake: FORCE
 	@$(QMAKE) -o Makefile.Debug ..\Prusa_TCP_Client\RaspberryPi_3DPrinted_Client.pro -spec win32-g++
@@ -76,6 +79,7 @@ dist:
 
 clean: compiler_clean 
 	-$(DEL_FILE) debug\main.o debug\mainwindow.o debug\moc_mainwindow.o
+	-$(DEL_FILE) debug\prusa_client_res.o
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -243,8 +247,13 @@ debug/moc_mainwindow.cpp: ../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QMainWi
 		../../../Qt/5.9.1/mingw53_32/include/QtGui/qinputmethod.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QButtonGroup \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qbuttongroup.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QComboBox \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qcombobox.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QHeaderView \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qheaderview.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qframe.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtCore/qabstractitemmodel.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtCore/qitemselectionmodel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qstyleoption.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractspinbox.h \
@@ -255,13 +264,6 @@ debug/moc_mainwindow.cpp: ../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QMainWi
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qstyle.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qtabbar.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qrubberband.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qframe.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtCore/qabstractitemmodel.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QHeaderView \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qheaderview.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemview.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtCore/qitemselectionmodel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QLabel \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qlabel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QMenu \
@@ -276,8 +278,18 @@ debug/moc_mainwindow.cpp: ../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QMainWi
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QWidget \
 		ui_authorinfos.h \
 		ui_server_options.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QComboBox \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qcombobox.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QDialogButtonBox \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qdialogbuttonbox.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QLineEdit \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qlineedit.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextcursor.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextformat.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qpen.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextoption.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QRadioButton \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qradiobutton.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QSpinBox \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qspinbox.h \
 		../Prusa_TCP_Client/mainwindow.h \
@@ -455,8 +467,13 @@ debug/main.o: ../Prusa_TCP_Client/main.cpp ../Prusa_TCP_Client/mainwindow.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtGui/qinputmethod.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QButtonGroup \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qbuttongroup.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QComboBox \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qcombobox.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QHeaderView \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qheaderview.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qframe.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtCore/qabstractitemmodel.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtCore/qitemselectionmodel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qstyleoption.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractspinbox.h \
@@ -467,13 +484,6 @@ debug/main.o: ../Prusa_TCP_Client/main.cpp ../Prusa_TCP_Client/mainwindow.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qstyle.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qtabbar.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qrubberband.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qframe.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtCore/qabstractitemmodel.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QHeaderView \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qheaderview.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemview.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtCore/qitemselectionmodel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QLabel \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qlabel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QMenu \
@@ -488,8 +498,18 @@ debug/main.o: ../Prusa_TCP_Client/main.cpp ../Prusa_TCP_Client/mainwindow.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QWidget \
 		ui_authorinfos.h \
 		ui_server_options.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QComboBox \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qcombobox.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QDialogButtonBox \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qdialogbuttonbox.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QLineEdit \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qlineedit.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextcursor.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextformat.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qpen.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextoption.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QRadioButton \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qradiobutton.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QSpinBox \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qspinbox.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtNetwork/QNetworkConfigurationManager \
@@ -642,8 +662,13 @@ debug/mainwindow.o: ../Prusa_TCP_Client/mainwindow.cpp ../Prusa_TCP_Client/mainw
 		../../../Qt/5.9.1/mingw53_32/include/QtGui/qinputmethod.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QButtonGroup \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qbuttongroup.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QComboBox \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qcombobox.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QHeaderView \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qheaderview.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qframe.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtCore/qabstractitemmodel.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtCore/qitemselectionmodel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qstyleoption.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractspinbox.h \
@@ -654,13 +679,6 @@ debug/mainwindow.o: ../Prusa_TCP_Client/mainwindow.cpp ../Prusa_TCP_Client/mainw
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qstyle.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qtabbar.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qrubberband.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qframe.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtCore/qabstractitemmodel.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QHeaderView \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qheaderview.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractitemview.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
-		../../../Qt/5.9.1/mingw53_32/include/QtCore/qitemselectionmodel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QLabel \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qlabel.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QMenu \
@@ -675,8 +693,18 @@ debug/mainwindow.o: ../Prusa_TCP_Client/mainwindow.cpp ../Prusa_TCP_Client/mainw
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QWidget \
 		ui_authorinfos.h \
 		ui_server_options.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QComboBox \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qcombobox.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QDialogButtonBox \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qdialogbuttonbox.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QLineEdit \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qlineedit.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextcursor.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextformat.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qpen.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtGui/qtextoption.h \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QRadioButton \
+		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qradiobutton.h \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/QSpinBox \
 		../../../Qt/5.9.1/mingw53_32/include/QtWidgets/qspinbox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o ..\Prusa_TCP_Client\mainwindow.cpp

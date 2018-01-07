@@ -38,3 +38,4 @@ FORMS += \
 
 DISTFILES +=
 
+win32:RC_FILE += prusa_client.rc
