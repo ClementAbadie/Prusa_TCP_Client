@@ -57,8 +57,13 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->resize(314, 250);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
+        MainWindow->setSizePolicy(sizePolicy);
         MainWindow->setMinimumSize(QSize(314, 250));
-        MainWindow->setMaximumSize(QSize(314, 250));
+        MainWindow->setMaximumSize(QSize(600, 500));
         actionOptions = new QAction(MainWindow);
         actionOptions->setObjectName(QStringLiteral("actionOptions"));
         actionAbout = new QAction(MainWindow);
@@ -181,7 +186,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Raspberry Pi - 3D Printer - Client", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "RPi 3D Printer - Client", Q_NULLPTR));
         actionOptions->setText(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
         actionAbout->setText(QApplication::translate("MainWindow", "About...", Q_NULLPTR));
         PushButton_Connect_to_Server->setText(QApplication::translate("MainWindow", "Connection", Q_NULLPTR));

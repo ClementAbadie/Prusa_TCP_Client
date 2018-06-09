@@ -10,6 +10,12 @@
     <height>250</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="minimumSize">
    <size>
     <width>314</width>
@@ -18,12 +24,12 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>314</width>
-    <height>250</height>
+    <width>600</width>
+    <height>500</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>Raspberry Pi - 3D Printer - Client</string>
+   <string>RPi 3D Printer - Client</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="PushButton_Connect_to_Server">

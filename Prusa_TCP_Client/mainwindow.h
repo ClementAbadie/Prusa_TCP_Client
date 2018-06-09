@@ -20,7 +20,7 @@
 
 
 // Git and VERSION
-#define _VERSION_ "1.9"
+#define _VERSION_ "2.0"
 
 //Git Commit : Alt+g Alt+c Select Commit and Push (long click !)
 // https://github.com/ClementAbadie/Prusa_TCP_Client
@@ -133,6 +133,11 @@ private:
     int webcam_res_v_default = 900;
     int webcam_framerate_default = 20;
 
+    //UI
+ // Tablet mode reamplaced by High-DPI support (see main.cpp)
+ //   void set_tablet_mode(bool on);
+
+    //TCP
     bool Connect_to_Server();
     bool Connect_to_Servers();
 

@@ -57,11 +57,11 @@ public:
         if (Dialog_Server_Options->objectName().isEmpty())
             Dialog_Server_Options->setObjectName(QStringLiteral("Dialog_Server_Options"));
         Dialog_Server_Options->setWindowModality(Qt::WindowModal);
-        Dialog_Server_Options->resize(379, 319);
+        Dialog_Server_Options->resize(379, 359);
         Dialog_Server_Options->setModal(true);
         buttonBox = new QDialogButtonBox(Dialog_Server_Options);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setGeometry(QRect(10, 280, 361, 32));
+        buttonBox->setGeometry(QRect(10, 320, 361, 32));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Ok);
         label_timeout = new QLabel(Dialog_Server_Options);

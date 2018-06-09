@@ -8,6 +8,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     mainWindows->setupUi(this);
 
+
+    qDebug() << "Resize";
+
+
+
+
     dui_Options.setupUi(&dialog_Options);
 
     connect(m_TcpSocket, &QTcpSocket::connected,                this, &MainWindow::onConnected);
@@ -21,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_TcpSocket_local, &QTcpSocket::connected,          this, &MainWindow::onConnected_local);
     connect(m_TcpSocket_local, &QTcpSocket::disconnected,       this, &MainWindow::onDisconnected_local);
     connect(m_TcpSocket_local, &QTcpSocket::readyRead,          this, &MainWindow::readyRead);
+
+
+
 
     connect(tcp_timer, SIGNAL(timeout()), this, SLOT(tcp_timeout()));
     connect(tmp_timer, SIGNAL(timeout()), this, SLOT(tmp_timeout()));
@@ -41,9 +50,6 @@ MainWindow::MainWindow(QWidget *parent) :
     Connect_to_Servers();
 
 
-
-
-
 }
 
 
@@ -53,8 +59,38 @@ MainWindow::~MainWindow()
 }
 
 
+/*
+//Tablet mode reamplaced by High-DPI support (see main.cpp)
+void MainWindow::set_tablet_mode(bool on)
+{
+
+   // double tablet_scale = 1.4;
+   // int main_windows_size_v = 314;
+   // int main_windows_size_h = 250;
 
 
+    if(on){
+        qDebug() << "Tablet mode ON";
+        QApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // DPI support
+        //main_windows_size_v *= tablet_scale;
+        //main_windows_size_h *= tablet_scale;
+
+    }
+
+    else{
+
+        qDebug() << "Tablet mode OFF";
+        QApplication::setAttribute(Qt::AA_DisableHighDpiScaling); // DPI support
+
+    }
+
+
+   // this->setMinimumSize(1,1); // because Max can't be lower than Min
+   // this->setMaximumSize(main_windows_size_v,main_windows_size_h);
+   // this->setMinimumSize(main_windows_size_v,main_windows_size_h);
+
+}
+*/
 void MainWindow::on_actionAbout_triggered()
 {
 
@@ -71,7 +107,7 @@ void MainWindow::on_actionAbout_triggered()
     }
 
 
-    qDebug() << "END";
+    qDebug() << "on_actionAbout_triggered END";
 }
 
 void MainWindow::on_actionOptions_triggered()
@@ -91,7 +127,9 @@ void MainWindow::on_actionOptions_triggered()
     mainWindows->Web_WebCam_Restart->setEnabled(dui_Options.radioButton_webcam_pi->isChecked());
     mainWindows->Web_WebCam_Stop->setEnabled(dui_Options.radioButton_webcam_pi->isChecked());
 
-    qDebug() << "END";
+ //   set_tablet_mode(dui_Options.checkBox_TabletMode->isChecked());
+
+    qDebug() << "on_actionOptions_triggered END";
 }
 
 void MainWindow::tcp_timeout(){
@@ -494,6 +532,7 @@ void MainWindow::on_Server_projects_clicked()
     //process->startDetached(file, QStringList() << "");
         QDesktopServices::openUrl(QUrl(file, QUrl::TolerantMode));
 }
+
 
 void MainWindow::resetSettings()
 {
