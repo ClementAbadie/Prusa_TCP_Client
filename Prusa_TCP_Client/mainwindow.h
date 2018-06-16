@@ -20,7 +20,7 @@
 
 
 // Git and VERSION
-#define _VERSION_ "2.0"
+#define _VERSION_ "2.1"
 
 //Git Commit : Alt+g Alt+c Select Commit and Push (long click !)
 // https://github.com/ClementAbadie/Prusa_TCP_Client
