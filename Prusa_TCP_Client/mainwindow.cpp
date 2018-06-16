@@ -435,7 +435,7 @@ void MainWindow::web_Open_Server_View()
     QString server_ip;
     if(m_TcpSocket_connected_distant) server_ip = dui_Options.comboBox_Server_IP_Distant->currentText();
     if(m_TcpSocket_connected_local) server_ip = dui_Options.comboBox_Server_IP_Local->currentText();
-    QString web_server_url = "http://" + server_ip + ":" + WEB_SERVER_PORT;
+    QString web_server_url = "http://" + server_ip + ":" + QString::number(WEB_SERVER_PORT);
 
     if (m_debug)
         qDebug() << "web_server_url" << web_server_url;

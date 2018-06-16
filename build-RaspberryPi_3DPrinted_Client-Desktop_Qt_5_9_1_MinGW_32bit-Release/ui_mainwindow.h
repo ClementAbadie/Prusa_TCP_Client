@@ -63,7 +63,7 @@ public:
         sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
         MainWindow->setSizePolicy(sizePolicy);
         MainWindow->setMinimumSize(QSize(314, 250));
-        MainWindow->setMaximumSize(QSize(600, 500));
+        MainWindow->setMaximumSize(QSize(314, 250));
         actionOptions = new QAction(MainWindow);
         actionOptions->setObjectName(QStringLiteral("actionOptions"));
         actionAbout = new QAction(MainWindow);
